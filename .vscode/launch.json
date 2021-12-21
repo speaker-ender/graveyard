@@ -1,0 +1,66 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Compile",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "truffle",
+                "compile"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Test",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "truffle",
+                "test"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Local Deploy Contracts",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "truffle",
+                "migrate",
+                "--network",
+                "development"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run Scripts",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "truffle",
+                "exec",
+                "--network",
+                "development",
+                "./scripts/index.js"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+    ]
+}
