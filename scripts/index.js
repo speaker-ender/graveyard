@@ -9,7 +9,7 @@ module.exports = async function main(callback) {
         // Set up a Truffle contract, representing our deployed Box instance
         const DeadCoin = artifacts.require('DeadCoin');
         const deadCoin = await DeadCoin.deployed();
-
+        console.log(deadCoin);
         // Send a transaction to store() a new value in the Box
         // await deadCoin.store(23);
 
