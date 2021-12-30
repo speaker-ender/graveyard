@@ -107,6 +107,38 @@ contract('DeadCoin', function ([sender, receiver]) {
         });
     });
 
+    it('emits an approval event for receiver from increaseAllowance function', async function () {
+        // Function: approve
+        // Params: address spender, uint256 amount
+        await this.deadCoin.approve(receiver, this.knownValue);
+
+        // Function: increaseAllowance
+        // Params: address spender, uint256 addedValue
+        const receipt = await this.deadCoin.increaseAllowance(receiver, this.knownValue);
+
+        expectEvent(receipt, 'Approval', {
+            owner: sender,
+            spender: receiver,
+            value: this.knownValue.add(this.knownValue),
+        });
+    });
+
+    it('emits an approval event for receiver from decreaseAllowance function', async function () {
+        // Function: approve
+        // Params: address spender, uint256 amount
+        await this.deadCoin.approve(receiver, this.knownValue.add(this.knownValue));
+
+        // Function: decreaseAllowance
+        // Params: address spender, uint256 addedValue
+        const receipt = await this.deadCoin.decreaseAllowance(receiver, this.knownValue);
+
+        expectEvent(receipt, 'Approval', {
+            owner: sender,
+            spender: receiver,
+            value: this.knownValue,
+        });
+    });
+
     it('emits a transfer event for transferFrom call', async function () {
         // Function: approve
         // Params: address spender, uint256 amount
@@ -182,4 +214,47 @@ contract('DeadCoin', function ([sender, receiver]) {
 
         expect(receiverBalance).to.be.bignumber.equal(this.randomValue);
     });
+
+    //
+    // BURN FUNCTIONS
+    //
+    it('updates total supply after burning', async function () {
+        const startSupply = await this.deadCoin.totalSupply();
+
+        // Function: burn
+        // Params: amount
+        await this.deadCoin.burn(this.knownValue);
+
+        const endSupply = await this.deadCoin.totalSupply();
+
+        expect(endSupply).to.be.bignumber.equal(startSupply.sub(this.knownValue));
+    });
+
+    it('reverts when burnFrom amount exceeds allowance', async function () {
+
+        await expectRevert(
+            // Function: burnFrom
+            // Params: address account, uint256 amount
+            this.deadCoin.burnFrom(sender, this.knownValue),
+            'ERC20: burn amount exceeds allowance',
+        );
+    });
+
+    it('updates total supply after burnFrom', async function () {
+        await this.deadCoin.approve(sender, this.knownValue);
+
+        const startSupply = await this.deadCoin.totalSupply();
+
+        // Function: burn
+        // Params: amount
+        await this.deadCoin.burnFrom(sender, this.knownValue);
+
+        const endSupply = await this.deadCoin.totalSupply();
+
+        expect(endSupply).to.be.bignumber.equal(startSupply.sub(this.knownValue));
+    });
+
+    //
+    // PAUSE FUNCTIONS
+    //
 });
