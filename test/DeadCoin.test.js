@@ -254,7 +254,47 @@ contract('DeadCoin', function ([sender, receiver]) {
         expect(endSupply).to.be.bignumber.equal(startSupply.sub(this.knownValue));
     });
 
+
     //
-    // PAUSE FUNCTIONS
+    // VOTE FUNCTIONS
     //
+    it('emits a delegateChanged event from a delegate call', async function () {
+        const delegateAddress = await this.deadCoin.delegates(sender);
+        const receipt = await this.deadCoin.delegate(receiver);
+
+        expectEvent(receipt, 'DelegateChanged', {
+            delegator: sender,
+            fromDelegate: delegateAddress,
+            toDelegate: receiver,
+        });
+    });
+
+    it('adding voting power to self', async function () {
+        const delegateAddress = await this.deadCoin.delegates(sender);
+        await this.deadCoin.delegate(sender);
+        const votes = await this.deadCoin.getVotes(sender);
+
+        // Need to look how original delegation is done to actually test this
+        expect(votes).to.be.bignumber.equal(votes);
+    });
+
+    it('changing votes after delegation', async function () {
+        // const delegateAddress = await this.deadCoin.delegates(sender);
+        await this.deadCoin.delegate(sender);
+
+        const startSenderVotes = await this.deadCoin.getVotes(sender);
+        // console.log('Sender vote count after delegating self', startSenderVotes.toString());
+        const startReceiverVotes = await this.deadCoin.getVotes(receiver);
+        // console.log('Receiver vote count after delegating self', startReceiverVotes.toString());
+
+        await this.deadCoin.delegate(receiver);
+
+        const endSenderVotes = await this.deadCoin.getVotes(sender);
+        // console.log('Sender vote count after delegation transfer', endSenderVotes.toString());
+        const endReceiverVotes = await this.deadCoin.getVotes(receiver);
+        // console.log('Receiver vote count after delegation transfer', endReceiverVotes.toString());
+
+        // Need to look how original delegation is done to actually test this
+        expect(startSenderVotes).to.be.bignumber.equal(endReceiverVotes);
+    });
 });
