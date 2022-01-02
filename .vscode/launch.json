@@ -7,8 +7,7 @@
             "name": "Compile",
             "runtimeExecutable": "npx",
             "runtimeArgs": [
-                "truffle",
-                "compile"
+                "hardhat"
             ],
             "outputCapture": "std",
             "cwd": "${workspaceFolder}/",
@@ -18,49 +17,58 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Test",
-            "runtimeExecutable": "npx",
+            "name": "Hardhat Run Node",
+            "runtimeExecutable": "npm",
             "runtimeArgs": [
-                "truffle",
+                "run",
+                "run node"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Hardhat Accounts",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "hardhat accounts"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Hardhat Deply Script",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "deploy script"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Hardhat Test",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
                 "test"
             ],
             "outputCapture": "std",
             "cwd": "${workspaceFolder}/",
             "console": "integratedTerminal",
             "args": []
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Compile and Deploy Contracts",
-            "runtimeExecutable": "npx",
-            "runtimeArgs": [
-                "truffle",
-                "migrate",
-                "--network",
-                "development"
-            ],
-            "outputCapture": "std",
-            "cwd": "${workspaceFolder}/",
-            "console": "integratedTerminal",
-            "args": []
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Run Scripts",
-            "runtimeExecutable": "npx",
-            "runtimeArgs": [
-                "truffle",
-                "exec",
-                "--network",
-                "development",
-                "./scripts/index.js"
-            ],
-            "outputCapture": "std",
-            "cwd": "${workspaceFolder}/",
-            "console": "integratedTerminal",
-            "args": []
-        },
+        }
     ]
 }

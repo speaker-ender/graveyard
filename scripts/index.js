@@ -10,6 +10,9 @@ module.exports = async function main(callback) {
         const DeadCoin = artifacts.require('DeadCoin');
         const deadCoin = await DeadCoin.deployed();
         console.log(deadCoin);
+
+        const receipt = await this.deadCoin.transfer(constants.ZERO_ADDRESS, this.knownValue, { from: sender });
+
         // Send a transaction to store() a new value in the Box
         // await deadCoin.store(23);
 
