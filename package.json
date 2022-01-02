@@ -15,7 +15,7 @@
     "@openzeppelin/contracts-upgradeable": "^4.4.1",
     "@openzeppelin/test-helpers": "^0.5.15",
     "chai": "^4.3.4",
-    "ganache-cli": "^6.12.2",
-    "truffle": "^5.4.25"
+    "ganache": "^7.0.0-beta.2",
+    "truffle": "^5.4.26"
   }
 }

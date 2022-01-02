@@ -32,7 +32,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Local Deploy Contracts",
+            "name": "Compile and Deploy Contracts",
             "runtimeExecutable": "npx",
             "runtimeArgs": [
                 "truffle",
