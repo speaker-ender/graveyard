@@ -1,12 +1,27 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "es2018",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "outDir": "dist",
-    "declaration": true
+    "resolveJsonModule": true,
+    "declaration": true,
+    "paths": {
+      "test-helpers": [
+        "custom_typings/@openzeppelin"
+      ]
+    },
   },
-  "include": ["./scripts", "./test", "./typechain"],
-  "files": ["./hardhat.config.ts"]
+  "include": [
+    "scripts",
+    "test",
+    "typechain",
+    "custom_typings",
+    "custom_typings/**/*",
+  ],
+  "files": [
+    "hardhat.config.ts"
+  ]
 }

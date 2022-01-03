@@ -5,9 +5,10 @@
             "type": "node",
             "request": "launch",
             "name": "Compile",
-            "runtimeExecutable": "npx",
+            "runtimeExecutable": "npm",
             "runtimeArgs": [
-                "hardhat"
+                "run",
+                "compile"
             ],
             "outputCapture": "std",
             "cwd": "${workspaceFolder}/",
@@ -35,7 +36,7 @@
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run",
-                "hardhat accounts"
+                "accounts"
             ],
             "outputCapture": "std",
             "cwd": "${workspaceFolder}/",
@@ -45,7 +46,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Hardhat Deply Script",
+            "name": "Hardhat Deploy Script",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run",
