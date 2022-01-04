@@ -9,7 +9,7 @@ import {
 } from "@openzeppelin/test-helpers";
 import { deployContract } from 'ethereum-waffle';
 import DeadCoinArtifact from '../artifacts/contracts/DeadCoin.sol/DeadCoin.json'
-import { DeadCoin } from 'typechain';
+import { DeadCoin } from 'typechain-types';
 
 // Constants
 const MAX_TRANSFER_VALUE = 1000000;

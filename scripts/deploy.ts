@@ -13,13 +13,27 @@ async function main() {
   // manually to make sure everything is compiled
   // await hre.run('compile');
 
-  // We get the contract to deploy
+  // DeadCoin
   const DeadCoin = await ethers.getContractFactory("DeadCoin");
   const deadCoin = await DeadCoin.deploy();
 
   await deadCoin.deployed();
 
   console.log("DeadCoin deployed to:", deadCoin.address);
+
+  const Formic = await ethers.getContractFactory("Formic");
+  const formic = await Formic.deploy();
+
+  await formic.deployed();
+
+  console.log("Formic deployed to:", formic.address);
+
+  const Pequeninos = await ethers.getContractFactory("Pequeninos");
+  const pequeninos = await Pequeninos.deploy();
+
+  await pequeninos.deployed();
+
+  console.log("Pequeninos deployed to:", pequeninos.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

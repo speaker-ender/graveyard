@@ -8,17 +8,11 @@
     "outDir": "dist",
     "resolveJsonModule": true,
     "declaration": true,
-    "paths": {
-      "test-helpers": [
-        "custom_typings/@openzeppelin"
-      ]
-    },
   },
   "include": [
     "scripts",
     "test",
-    "typechain",
-    "custom_typings",
+    "typechain-types",
     "custom_typings/**/*",
   ],
   "files": [

@@ -18,6 +18,20 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Clean Types",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "clean types"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Hardhat Run Node",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
