@@ -228,4 +228,31 @@ describe("DeadCoin", function () {
         // Need to look how original delegation is done to actually test this
         expect(startSenderVotes).to.equal(endReceiverVotes);
     });
+
+    //
+    // Spawn Functions
+    // 
+    it('emits a spawn event for spawn function call', async function () {
+        await expect(deadCoin.spawn(sender, knownValue))
+            .to.emit(deadCoin, 'Spawn')
+            .withArgs(sender, sender, knownValue.mul(2));
+
+    });
+
+    it('reverts when spawn amount exceeds balance', async function () {
+        const spawnerBalance = await deadCoin.balanceOf(sender);
+
+        await expectRevert(
+            deadCoin.spawn(sender, spawnerBalance.add(1)),
+            'ERC20: burn amount exceeds balance',
+        );
+    });
+
+    it('updates balances on successful spawn', async function () {
+        const startBalance = await deadCoin.balanceOf(sender);
+        await deadCoin.spawn(sender, knownValue);
+        const endBalance = await deadCoin.balanceOf(sender);
+
+        expect(endBalance).to.equal(startBalance.add(knownValue));
+    });
 });

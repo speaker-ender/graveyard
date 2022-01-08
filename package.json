@@ -7,6 +7,7 @@
     "run node": "NODE_OPTIONS=--openssl-legacy-provider hardhat node",
     "compile": "NODE_OPTIONS=--openssl-legacy-provider hardhat compile",
     "clean types": "NODE_OPTIONS=--openssl-legacy-provider hardhat clean",
+    "clean and compile": "NODE_OPTIONS=--openssl-legacy-provider hardhat clean && NODE_OPTIONS=--openssl-legacy-provider hardhat compile",
     "test": "NODE_OPTIONS=--openssl-legacy-provider hardhat test",
     "deploy script": "NODE_OPTIONS=--openssl-legacy-provider hardhat run ./scripts/deploy.ts --network localhost",
     "accounts": "NODE_OPTIONS=--openssl-legacy-provider hardhat accounts"

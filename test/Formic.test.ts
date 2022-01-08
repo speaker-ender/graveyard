@@ -10,6 +10,7 @@ import {
 import { deployContract } from 'ethereum-waffle';
 import FormicArtifact from '../artifacts/contracts/Formic.sol/Formic.json'
 import { Formic } from 'typechain-types';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 // Constants
 const MAX_TRANSFER_VALUE = 1000000;
@@ -20,8 +21,10 @@ describe("Formic", function () {
     let zeroValue: BigNumber;
     let knownValue: BigNumber;
     let randomValue: BigNumber;
-    let sender: string;
-    let receiver: string;
+    let senderAddress: string;
+    let senderAccount: SignerWithAddress;
+    let receiverAddress: string;
+    let receiverAccount: SignerWithAddress;
 
     before(async function () {
         zeroValue = BigNumber.from(0);
@@ -33,16 +36,32 @@ describe("Formic", function () {
 
     beforeEach(async function () {
         const signers = await ethers.getSigners();
-        sender = signers[0].address;
-        receiver = signers[1].address;
-        formic = (await deployContract(signers[0], FormicArtifact)) as Formic;
+        senderAccount = signers[0];
+        senderAddress = senderAccount.address;
+        receiverAccount = signers[1];
+        receiverAddress = receiverAccount.address;
+        formic = (await deployContract(signers[0], FormicArtifact, [senderAddress])) as Formic;
         await formic.deployed();
     });
 
-    it('reverts when transferring tokens to the zero address', async function () {
-        // await expectRevert(
-        //     formic.transfer(constants.ZERO_ADDRESS, knownValue, { from: sender }),
-        //     'ERC20: transfer to the zero address',
-        // );
+    it('reverts when minting tokens to the zero address', async function () {
+        await expectRevert(
+            formic.mintTo(constants.ZERO_ADDRESS),
+            'ERC721: mint to the zero address',
+        );
+    });
+
+    it('emits transfer event on successful mint', async function () {
+        const nextTokenId = (await formic.totalSupply()).add(1);
+        await expect(formic.mintTo(senderAddress))
+            .to.emit(formic, 'Transfer')
+            .withArgs(constants.ZERO_ADDRESS, senderAddress, nextTokenId);
+    });
+
+    it('reverts when non admin tries to mint', async function () {
+        await expectRevert(
+            formic.connect(receiverAccount).mintTo(senderAddress),
+            'Ownable: caller is not the owner',
+        );
     });
 });

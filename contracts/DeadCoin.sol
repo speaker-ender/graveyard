@@ -26,6 +26,7 @@ contract DeadCoin is
     bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    event Spawn(address indexed _from, address indexed _to, uint256 _value);
 
     constructor() ERC20("Dead Coin", "DEAD") ERC20Permit("Dead Coin") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -49,6 +50,12 @@ contract DeadCoin is
 
     function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {
         _mint(to, amount);
+    }
+
+    function spawn(address account, uint256 amount) public {
+        _burn(account, amount);
+        _mint(account, amount * 2);
+        emit Spawn(account, account, amount * 2);
     }
 
     function _beforeTokenTransfer(

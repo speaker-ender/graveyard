@@ -32,6 +32,20 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Clean and Compile",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "clean and compile",
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Hardhat Run Node",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
