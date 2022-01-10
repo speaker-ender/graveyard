@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { BigNumber } from "ethers";
 import "chai-bn";
 import { ethers } from "hardhat";
+import hre from 'hardhat'
 import {
     constants,
     expectRevert,
@@ -10,6 +11,9 @@ import {
 import { deployContract } from 'ethereum-waffle';
 import DeadCoinArtifact from '../artifacts/contracts/DeadCoin.sol/DeadCoin.json'
 import { DeadCoin } from 'typechain-types';
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 // Constants
 const MAX_TRANSFER_VALUE = 1000000;
@@ -33,8 +37,17 @@ describe("DeadCoin", function () {
 
     beforeEach(async function () {
         const signers = await ethers.getSigners();
-        sender = signers[0].address;
-        receiver = signers[1].address;
+        const networkName = hre.network.name;
+
+        if (networkName !== 'hardhat') {
+            console.log('using wallet');
+            sender = process.env.MAIN_ADDRESS || "";
+            receiver = process.env.SECONDARY_ADDRESS || "";
+        } else {
+            console.log('using signers');
+            sender = signers[0].address;
+            receiver = signers[1].address;
+        }
         deadCoin = (await deployContract(signers[0], DeadCoinArtifact)) as DeadCoin;
         await deadCoin.deployed();
     });

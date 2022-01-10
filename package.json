@@ -16,7 +16,7 @@
     "accounts": "NODE_OPTIONS=--openssl-legacy-provider hardhat accounts"
   },
   "keywords": [],
-  "author": "",
+  "author": "3nder",
   "license": "ISC",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",
