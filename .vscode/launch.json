@@ -18,6 +18,20 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Compile Matic",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "compile matic"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Clean Types",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
@@ -88,11 +102,39 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Hardhat Deploy Script Matic",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "deploy script matic"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Hardhat Test",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run",
                 "test"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Hardhat Test Matic",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "test matic"
             ],
             "outputCapture": "std",
             "cwd": "${workspaceFolder}/",

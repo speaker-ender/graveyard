@@ -15,8 +15,8 @@ async function main() {
   // await hre.run('compile');
 
   // OpenSea proxy registry addresses for rinkeby and mainnet.
-  const signers = await ethers.getSigners();
-  const zeroAddress = signers[0].address;
+  // const signers = await ethers.getSigners();
+  // const zeroAddress = signers[0].address;
 
   // let proxyRegistryAddress = zeroAddress;
 

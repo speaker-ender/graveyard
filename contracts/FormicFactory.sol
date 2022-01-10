@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.2;
+pragma solidity ^0.8.4;
 
 import "hardhat/console.sol";
 
@@ -25,16 +25,12 @@ contract FormicFactory is IERC721Factory, Ownable {
     address public lootBoxNftAddress;
     string public baseURI = "https://formic.club/";
 
-    uint256 FORMIC_SUPPLY = 1000;
+    uint256 FORMIC_SUPPLY = 50;
 
     /*
      * Three different options for minting Formics (basic, premium, and gold).
      */
-    uint256 NUM_OPTIONS = 3;
-    uint256 SINGLE_FORMIC_OPTION = 0;
-    uint256 MULTIPLE_FORMIC_OPTION = 1;
-    uint256 LOOTBOX_OPTION = 2;
-    uint256 NUM_FORMICS_IN_MULTIPLE_FORMIC_OPTION = 4;
+    uint256 NUM_OPTIONS = 1;
 
     constructor(address _proxyRegistryAddress, address _nftAddress) {
         proxyRegistryAddress = _proxyRegistryAddress;
@@ -74,7 +70,7 @@ contract FormicFactory is IERC721Factory, Ownable {
         }
     }
 
-    function mint(uint256 _optionId, address _toAddress) public override {
+    function mint(address _toAddress, uint256 _formic_count) public override {
         // Must be sent from the owner proxy or owner.
         ProxyRegistry proxyRegistry = ProxyRegistry(proxyRegistryAddress);
         assert(
@@ -82,25 +78,11 @@ contract FormicFactory is IERC721Factory, Ownable {
                 owner() == _msgSender() ||
                 _msgSender() == lootBoxNftAddress
         );
-        require(canMint(_optionId));
 
-        Formic formic = Formic(nftAddress);
-        formic.mintTo(_toAddress);
-    }
-
-    function mint(
-        uint256 _optionId,
-        address _toAddress,
-        uint256 _formic_count
-    ) public override {
-        // Must be sent from the owner proxy or owner.
-        ProxyRegistry proxyRegistry = ProxyRegistry(proxyRegistryAddress);
-        assert(
-            address(proxyRegistry.proxies(owner())) == _msgSender() ||
-                owner() == _msgSender() ||
-                _msgSender() == lootBoxNftAddress
+        require(
+            canMint(_formic_count),
+            "FormicFactory: mint count greater than available supply"
         );
-        require(canMint(_optionId));
 
         Formic formic = Formic(nftAddress);
         for (uint256 i = 0; i < _formic_count; i++) {
@@ -108,26 +90,19 @@ contract FormicFactory is IERC721Factory, Ownable {
         }
     }
 
-    function canMint(uint256 _optionId) public view override returns (bool) {
-        if (_optionId >= NUM_OPTIONS) {
-            return false;
-        }
+    function mint(address _toAddress) public override {
+        mint(_toAddress, 1);
+    }
 
+    function canMint(uint256 _mint_count) public view override returns (bool) {
         Formic formic = Formic(nftAddress);
         uint256 formicSupply = formic.totalSupply();
 
-        uint256 numItemsAllocated = 0;
-        if (_optionId == SINGLE_FORMIC_OPTION) {
-            numItemsAllocated = 1;
-        } else if (_optionId == MULTIPLE_FORMIC_OPTION) {
-            numItemsAllocated = NUM_FORMICS_IN_MULTIPLE_FORMIC_OPTION;
-        } else if (_optionId == LOOTBOX_OPTION) {
-            CreatureLootBox openSeaCreatureLootBox = CreatureLootBox(
-                lootBoxNftAddress
-            );
-            numItemsAllocated = openSeaCreatureLootBox.itemsPerLootbox();
-        }
-        return formicSupply < (FORMIC_SUPPLY - numItemsAllocated);
+        return _mint_count <= (FORMIC_SUPPLY - formicSupply);
+    }
+
+    function canMint() public view override returns (bool) {
+        return canMint(1);
     }
 
     function tokenURI(uint256 _optionId)
@@ -148,7 +123,7 @@ contract FormicFactory is IERC721Factory, Ownable {
         address _to,
         uint256 _tokenId
     ) public {
-        mint(_tokenId, _to);
+        mint(_to);
     }
 
     /**

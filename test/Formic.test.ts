@@ -1,6 +1,6 @@
 // test/Formic.test.js
 import { expect } from 'chai';
-import { BigNumber } from "ethers";
+import { BigNumber, ContractTransaction } from "ethers";
 import "chai-bn";
 import { ethers } from "hardhat";
 import {
@@ -13,14 +13,16 @@ import { Formic } from 'typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 // Constants
-const MAX_TRANSFER_VALUE = 1000000;
+const MAX_SUPPLY = 50;
+const NUMBER_OF_RANDOM_TESTS = 5;
+const VALID_IDS = [...Array(MAX_SUPPLY).keys()];
 
 describe("Formic", function () {
     // Let's override context later
     let formic: Formic;
     let zeroValue: BigNumber;
     let knownValue: BigNumber;
-    let randomValue: BigNumber;
+    let randomValue = BigNumber.from(Math.floor(Math.random() * MAX_SUPPLY));
     let senderAddress: string;
     let senderAccount: SignerWithAddress;
     let receiverAddress: string;
@@ -29,7 +31,7 @@ describe("Formic", function () {
     before(async function () {
         zeroValue = BigNumber.from(0);
         knownValue = BigNumber.from(1);
-        randomValue = BigNumber.from(Math.floor(Math.random() * MAX_TRANSFER_VALUE));
+        // randomValue = BigNumber.from(Math.floor(Math.random() * MAX_TRANSFER_VALUE));
 
         this.Formic = await ethers.getContractFactory("Formic");
     });
@@ -63,5 +65,18 @@ describe("Formic", function () {
             formic.connect(receiverAccount).mintTo(senderAddress),
             'Ownable: caller is not the owner',
         );
+    });
+
+    describe("receives correct uri for token", function () {
+        // Use for more thorough testing
+        // const randomTests = [...Array(randomValue.toNumber()).keys()];
+
+        [...Array(3).keys()].forEach((i) => {
+            it(`received correct token uri for id ${i}`, async function () {
+                const response = await formic.mintTo(senderAddress);
+                expect(await (formic.tokenURI(response.value)))
+                    .to.equal(`https://formic.club/${response.value.toString()}`);
+            });
+        });
     });
 });

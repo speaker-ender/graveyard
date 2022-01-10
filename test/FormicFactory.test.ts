@@ -14,9 +14,9 @@ import { Formic, FormicFactory, ProxyRegistry } from 'typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 // Constants
-const MAX_TRANSFER_VALUE = 1000000;
+const MAX_SUPPLY = 50;
 
-describe.only("FormicFactory", function () {
+describe("FormicFactory", function () {
     // Let's override context later
     let formicFactory: FormicFactory;
     let formic: Formic;
@@ -31,7 +31,7 @@ describe.only("FormicFactory", function () {
     before(async function () {
         zeroValue = BigNumber.from(0);
         knownValue = BigNumber.from(1);
-        randomValue = BigNumber.from(Math.floor(Math.random() * MAX_TRANSFER_VALUE));
+        randomValue = BigNumber.from(Math.floor(Math.random() * MAX_SUPPLY));
 
         this.Formic = await ethers.getContractFactory("Formic");
         this.FormicFactory = await ethers.getContractFactory("FormicFactory");
@@ -59,33 +59,46 @@ describe.only("FormicFactory", function () {
     });
 
     it('reverts when minting tokens to the zero address', async function () {
-        // await expectRevert(
-        //     formicFactory.mintTo(constants.ZERO_ADDRESS),
-        //     'ERC721: mint to the zero address',
-        // );
+        await expectRevert(
+            formicFactory["mint(address)"](constants.ZERO_ADDRESS),
+            'ERC721: mint to the zero address',
+        );
     });
 
     it('emits transfer event on successful mint', async function () {
-        // const nextTokenId = (await formicFactory. .totalSupply()).add(1);
-        console.log('Formic contract owner address', await formic.owner());
-        console.log('FormicFactory contract owner address', await formicFactory.owner());
-        console.log('FormicFactory contract address', formicFactory.address);
-        console.log('sender address', senderAddress);
-        await expect(formicFactory["mint(uint256,address)"](BigNumber.from(1), senderAddress))
-            .to.emit(formicFactory, 'Transfer')
-            .withArgs(constants.ZERO_ADDRESS, senderAddress);
+        const endTokenId = (await formic.totalSupply()).add(knownValue);
+
+        await expect(formicFactory["mint(address)"](senderAddress))
+            .to.emit(formic, 'Transfer')
+            .withArgs(constants.ZERO_ADDRESS, senderAddress, endTokenId);
     });
 
     it('reverts when non admin tries to mint', async function () {
+
         await expectRevert(
-            formicFactory.connect(receiverAccount)["mint(uint256,address)"](BigNumber.from(1), senderAddress),
-            'Transaction reverted: function call to a non-contract account',
+            formicFactory.connect(receiverAccount)["mint(address)"](receiverAddress),
+            'reverted with panic code 0x1 (Assertion error)',
         );
     });
 
     it('reverts when minting more than total supply', async function () {
+
         await expectRevert(
-            formicFactory["mint(uint256,address,uint256)"](BigNumber.from(1), senderAddress, BigNumber.from(1001)),
+            formicFactory["mint(address,uint256)"](senderAddress, BigNumber.from(51)),
+            'FormicFactory: mint count greater than available supply',
+        );
+    });
+
+    it('transfer ownership properly', async function () {
+        await expect(formicFactory.transferOwnership(receiverAddress))
+            .to.emit(formicFactory, 'Transfer')
+            .withArgs(senderAddress, receiverAddress, BigNumber.from(0));
+    });
+
+    it('reverts when trying to transfer from non owner', async function () {
+
+        await expectRevert(
+            formicFactory.connect(receiverAddress).transferOwnership(receiverAddress),
             'Ownable: caller is not the owner',
         );
     });

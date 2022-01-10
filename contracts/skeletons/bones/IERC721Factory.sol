@@ -27,7 +27,9 @@ interface IERC721Factory {
      * @dev Returns whether the option ID can be minted. Can return false if the developer wishes to
      * restrict a total supply per option ID (or overall).
      */
-    function canMint(uint256 _optionId) external view returns (bool);
+    function canMint() external view returns (bool);
+
+    function canMint(uint256 _mint_count) external view returns (bool);
 
     /**
      * @dev Returns a URL specifying some metadata about the option. This metadata can be of the
@@ -44,14 +46,9 @@ interface IERC721Factory {
      * @dev Mints asset(s) in accordance to a specific address with a particular "option". This should be
      * callable only by the contract owner or the owner's Wyvern Proxy (later universal login will solve this).
      * Options should also be delineated 0 - (numOptions() - 1) for convenient indexing.
-     * @param _optionId the option id
      * @param _toAddress address of the future owner of the asset(s)
      */
-    function mint(uint256 _optionId, address _toAddress) external;
+    function mint(address _toAddress) external;
 
-    function mint(
-        uint256 _optionId,
-        address _toAddress,
-        uint256 _formic_count
-    ) external;
+    function mint(address _toAddress, uint256 _formic_count) external;
 }
