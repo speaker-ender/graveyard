@@ -1,0 +1,6 @@
+{
+    "mochaExplorer.files": "test/**/*.{j,t}s",
+    "mochaExplorer.nodeArgv": [
+        "--openssl-legacy-provider"
+    ]
+}

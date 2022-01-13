@@ -20,7 +20,7 @@ dotenv.config();
 // Constants
 const MAX_TRANSFER_VALUE = 1000000;
 
-describe.only("DeadCoin", function () {
+describe("DeadCoin", function () {
     // Let's override context later
     let deadCoin: DeadCoin;
     let zeroValue: BigNumber;
