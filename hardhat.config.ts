@@ -43,6 +43,16 @@ const config: HardhatUserConfig = {
     arbitrum: {
       url: 'https://rinkeby.arbitrum.io/rpc',
     },
+    arbl1: {
+      gas: 2100000,
+      url: process.env['L1RPC'] || '',
+      accounts: process.env['DEVNET_PRIVKEY'] ? [process.env['DEVNET_PRIVKEY']] : [],
+
+    },
+    arbl2: {
+      url: process.env['L2RPC'] || '',
+      accounts: process.env['DEVNET_PRIVKEY'] ? [process.env['DEVNET_PRIVKEY']] : [],
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,

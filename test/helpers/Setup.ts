@@ -10,28 +10,31 @@ import {
 } from "@openzeppelin/test-helpers";
 import { deployContract } from 'ethereum-waffle';
 import * as dotenv from "dotenv";
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
-dotenv.config()
+dotenv.config();
+
+export const getNetworkName = () => hre.network.name;
+
+export const isHardhat = () => getNetworkName() === 'hardhat';
 
 export const getAccounts = async () => {
-    const networkName = hre.network.name;
+    const signers = await ethers.getSigners();
 
-    if (!!process.env.MAIN_ADDRESS && !!process.env.SECONDARY_ADDRESS && networkName !== 'hardhat') {
-        return {
+    return !!process.env.MAIN_ADDRESS && !!process.env.SECONDARY_ADDRESS && !isHardhat() ?
+        {
             senderAccount: await ethers.getSigner(process.env.MAIN_ADDRESS),
             senderAddress: process.env.MAIN_ADDRESS || "",
             receiverAccount: await ethers.getSigner(process.env.SECONDARY_ADDRESS),
             receiverAddress: process.env.SECONDARY_ADDRESS || ""
         }
-    } else {
-        const signers = await ethers.getSigners();
-        return {
+        :
+        {
             senderAccount: signers[0],
             senderAddress: signers[0].address,
             receiverAccount: signers[1],
             receiverAddress: signers[1].address
         }
-    }
 }
 
 export const getTestValues = (maxRandomValue: number) => {
@@ -40,4 +43,9 @@ export const getTestValues = (maxRandomValue: number) => {
         knownValue: BigNumber.from(1),
         randomValue: BigNumber.from(Math.floor(Math.random() * maxRandomValue))
     }
+}
+
+export const getContract = async (senderAccount: SignerWithAddress, artifact: any) => {
+    await isHardhat ? deployContract(senderAccount, artifact) :
+        await deployContract(senderAccount, artifact);
 }

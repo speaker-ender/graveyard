@@ -3,7 +3,8 @@ import { expect } from 'chai';
 import { BigNumber } from "ethers";
 import "chai-bn";
 import { ethers } from "hardhat";
-import hre from 'hardhat'
+import hre from 'hardhat';
+import 'hardhat-deploy';
 import {
     constants,
     expectRevert,
@@ -41,6 +42,7 @@ describe("DeadCoin", function () {
     beforeEach(async function () {
         deadCoin = (await deployContract(senderAccount, DeadCoinArtifact)) as DeadCoin;
         await deadCoin.deployed();
+        console.log(deadCoin);
     });
 
     it('reverts when transferring tokens to the zero address', async function () {
