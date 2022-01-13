@@ -12,6 +12,7 @@ import FormicArtifact from '../artifacts/contracts/Formic.sol/Formic.json'
 import FormicFactoryArtifact from '../artifacts/contracts/FormicFactory.sol/FormicFactory.json'
 import { Formic, FormicFactory, ProxyRegistry } from 'typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import { getAccounts, getTestValues } from './helpers/Setup';
 
 // Constants
 const MAX_SUPPLY = 50;
@@ -29,30 +30,24 @@ describe("FormicFactory", function () {
     let receiverAccount: SignerWithAddress;
 
     before(async function () {
-        zeroValue = BigNumber.from(0);
-        knownValue = BigNumber.from(1);
-        randomValue = BigNumber.from(Math.floor(Math.random() * MAX_SUPPLY));
+        ; ({ zeroValue, knownValue, randomValue } = await getTestValues(MAX_SUPPLY));
 
         this.Formic = await ethers.getContractFactory("Formic");
         this.FormicFactory = await ethers.getContractFactory("FormicFactory");
         this.ProxyRegistry = await ethers.getContractFactory("contracts/skeletons/opensea/ERC721Tradable.sol:ProxyRegistry");
+        ; ({ senderAccount, senderAddress, receiverAccount, receiverAddress } = await getAccounts());
     });
 
     beforeEach(async function () {
-        const signers = await ethers.getSigners();
-        senderAccount = signers[0];
-        senderAddress = senderAccount.address;
-        receiverAccount = signers[1];
-        receiverAddress = receiverAccount.address;
 
         const proxyRegistry = await this.ProxyRegistry.deploy() as ProxyRegistry;
 
         await proxyRegistry.deployed();
 
-        formic = (await deployContract(signers[0], FormicArtifact, [proxyRegistry.address])) as Formic;
+        formic = (await deployContract(senderAccount, FormicArtifact, [proxyRegistry.address])) as Formic;
         await formic.deployed();
 
-        formicFactory = (await deployContract(signers[0], FormicFactoryArtifact, [proxyRegistry.address, formic.address])) as FormicFactory;
+        formicFactory = (await deployContract(senderAccount, FormicFactoryArtifact, [proxyRegistry.address, formic.address])) as FormicFactory;
         await formicFactory.deployed();
 
         await formic.transferOwnership(formicFactory.address);

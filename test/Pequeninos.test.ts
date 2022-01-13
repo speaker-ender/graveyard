@@ -10,6 +10,8 @@ import {
 import { deployContract } from 'ethereum-waffle';
 import PequeninosArtifact from '../artifacts/contracts/Pequeninos.sol/Pequeninos.json'
 import { Pequeninos } from 'typechain-types';
+import { getAccounts, getTestValues } from './helpers/Setup';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 // Constants
 const MAX_TRANSFER_VALUE = 1000000;
@@ -20,22 +22,20 @@ describe("Pequeninos", function () {
     let zeroValue: BigNumber;
     let knownValue: BigNumber;
     let randomValue: BigNumber;
-    let sender: string;
-    let receiver: string;
+    let senderAddress: string;
+    let senderAccount: SignerWithAddress;
+    let receiverAddress: string;
+    let receiverAccount: SignerWithAddress;
 
     before(async function () {
-        zeroValue = BigNumber.from(0);
-        knownValue = BigNumber.from(1);
-        randomValue = BigNumber.from(Math.floor(Math.random() * MAX_TRANSFER_VALUE));
+        ; ({ zeroValue, knownValue, randomValue } = await getTestValues(MAX_TRANSFER_VALUE));
 
         this.Pequeninos = await ethers.getContractFactory("Pequeninos");
+        ; ({ senderAccount, senderAddress, receiverAccount, receiverAddress } = await getAccounts());
     });
 
     beforeEach(async function () {
-        const signers = await ethers.getSigners();
-        sender = signers[0].address;
-        receiver = signers[1].address;
-        pequeninos = (await deployContract(signers[0], PequeninosArtifact)) as Pequeninos;
+        pequeninos = (await deployContract(senderAccount, PequeninosArtifact)) as Pequeninos;
         await pequeninos.deployed();
     });
 

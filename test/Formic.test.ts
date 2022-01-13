@@ -11,6 +11,8 @@ import { deployContract } from 'ethereum-waffle';
 import FormicArtifact from '../artifacts/contracts/Formic.sol/Formic.json'
 import { Formic } from 'typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import { getAccounts, getTestValues } from './helpers/Setup';
+import { sensitiveHeaders } from 'http2';
 
 // Constants
 const MAX_SUPPLY = 50;
@@ -22,27 +24,21 @@ describe("Formic", function () {
     let formic: Formic;
     let zeroValue: BigNumber;
     let knownValue: BigNumber;
-    let randomValue = BigNumber.from(Math.floor(Math.random() * MAX_SUPPLY));
+    let randomValue: BigNumber;
     let senderAddress: string;
     let senderAccount: SignerWithAddress;
     let receiverAddress: string;
     let receiverAccount: SignerWithAddress;
 
     before(async function () {
-        zeroValue = BigNumber.from(0);
-        knownValue = BigNumber.from(1);
-        // randomValue = BigNumber.from(Math.floor(Math.random() * MAX_TRANSFER_VALUE));
+        ; ({ zeroValue, knownValue, randomValue } = await getTestValues(MAX_SUPPLY));
 
         this.Formic = await ethers.getContractFactory("Formic");
+        ; ({ senderAccount, senderAddress, receiverAccount, receiverAddress } = await getAccounts());
     });
 
     beforeEach(async function () {
-        const signers = await ethers.getSigners();
-        senderAccount = signers[0];
-        senderAddress = senderAccount.address;
-        receiverAccount = signers[1];
-        receiverAddress = receiverAccount.address;
-        formic = (await deployContract(signers[0], FormicArtifact, [senderAddress])) as Formic;
+        formic = (await deployContract(senderAccount, FormicArtifact, [senderAddress])) as Formic;
         await formic.deployed();
     });
 
@@ -71,7 +67,7 @@ describe("Formic", function () {
         // Use for more thorough testing
         // const randomTests = [...Array(randomValue.toNumber()).keys()];
 
-        [...Array(3).keys()].forEach((i) => {
+        [...Array(NUMBER_OF_RANDOM_TESTS).keys()].forEach((i) => {
             it(`received correct token uri for id ${i}`, async function () {
                 const response = await formic.mintTo(senderAddress);
                 expect(await (formic.tokenURI(response.value)))
