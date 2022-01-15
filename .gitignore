@@ -1,8 +1,9 @@
-build
-node_modules
-artifacts
-cache
-typechain-types
 .env
 .secrets
 arbitrum
+artifacts
+build
+cache
+deployments
+node_modules
+typechain-types

@@ -2,15 +2,12 @@
 import { expect } from 'chai';
 import { BigNumber } from "ethers";
 import "chai-bn";
-import { ethers } from "hardhat";
+import { deployments, ethers } from "hardhat";
 import {
     constants,
     expectRevert,
 } from "@openzeppelin/test-helpers";
-import { deployContract } from 'ethereum-waffle';
-import FormicArtifact from '../artifacts/contracts/Formic.sol/Formic.json'
-import FormicFactoryArtifact from '../artifacts/contracts/FormicFactory.sol/FormicFactory.json'
-import { Formic, FormicFactory, ProxyRegistry } from 'typechain-types';
+import { Formic, FormicFactory } from 'typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { getAccounts, getTestValues } from './helpers/Setup';
 
@@ -31,26 +28,13 @@ describe("FormicFactory", function () {
 
     before(async function () {
         ; ({ zeroValue, knownValue, randomValue } = await getTestValues(MAX_SUPPLY));
-
-        this.Formic = await ethers.getContractFactory("Formic");
-        this.FormicFactory = await ethers.getContractFactory("FormicFactory");
-        this.ProxyRegistry = await ethers.getContractFactory("contracts/skeletons/opensea/ERC721Tradable.sol:ProxyRegistry");
         ; ({ senderAccount, senderAddress, receiverAccount, receiverAddress } = await getAccounts());
     });
 
     beforeEach(async function () {
-
-        const proxyRegistry = await this.ProxyRegistry.deploy() as ProxyRegistry;
-
-        await proxyRegistry.deployed();
-
-        formic = (await deployContract(senderAccount, FormicArtifact, [proxyRegistry.address])) as Formic;
-        await formic.deployed();
-
-        formicFactory = (await deployContract(senderAccount, FormicFactoryArtifact, [proxyRegistry.address, formic.address])) as FormicFactory;
-        await formicFactory.deployed();
-
-        await formic.transferOwnership(formicFactory.address);
+        await deployments.fixture(["FormicFactory"]);
+        formicFactory = await ethers.getContract('FormicFactory');
+        formic = await ethers.getContract('Formic');
     });
 
     it('reverts when minting tokens to the zero address', async function () {
@@ -91,9 +75,8 @@ describe("FormicFactory", function () {
     });
 
     it('reverts when trying to transfer from non owner', async function () {
-
         await expectRevert(
-            formicFactory.connect(receiverAddress).transferOwnership(receiverAddress),
+            formicFactory.connect(receiverAccount).transferOwnership(receiverAddress),
             'Ownable: caller is not the owner',
         );
     });

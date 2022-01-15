@@ -2,17 +2,14 @@
 import { expect } from 'chai';
 import { BigNumber, ContractTransaction } from "ethers";
 import "chai-bn";
-import { ethers } from "hardhat";
+import { deployments, ethers } from "hardhat";
 import {
     constants,
     expectRevert,
 } from "@openzeppelin/test-helpers";
-import { deployContract } from 'ethereum-waffle';
-import FormicArtifact from '../artifacts/contracts/Formic.sol/Formic.json'
 import { Formic } from 'typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { getAccounts, getTestValues } from './helpers/Setup';
-import { sensitiveHeaders } from 'http2';
 
 // Constants
 const MAX_SUPPLY = 50;
@@ -32,14 +29,12 @@ describe("Formic", function () {
 
     before(async function () {
         ; ({ zeroValue, knownValue, randomValue } = await getTestValues(MAX_SUPPLY));
-
-        this.Formic = await ethers.getContractFactory("Formic");
         ; ({ senderAccount, senderAddress, receiverAccount, receiverAddress } = await getAccounts());
     });
 
     beforeEach(async function () {
-        formic = (await deployContract(senderAccount, FormicArtifact, [senderAddress])) as Formic;
-        await formic.deployed();
+        await deployments.fixture(["Formic"]);
+        formic = await ethers.getContract('Formic');
     });
 
     it('reverts when minting tokens to the zero address', async function () {

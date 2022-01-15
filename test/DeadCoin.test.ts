@@ -2,15 +2,12 @@
 import { expect } from 'chai';
 import { BigNumber } from "ethers";
 import "chai-bn";
-import { ethers } from "hardhat";
-import hre from 'hardhat';
+import { ethers, deployments } from "hardhat";
 import 'hardhat-deploy';
 import {
     constants,
     expectRevert,
 } from "@openzeppelin/test-helpers";
-import { deployContract } from 'ethereum-waffle';
-import DeadCoinArtifact from '../artifacts/contracts/DeadCoin.sol/DeadCoin.json'
 import { DeadCoin } from 'typechain-types';
 import * as dotenv from "dotenv";
 import { getAccounts, getTestValues } from './helpers/Setup';
@@ -34,15 +31,12 @@ describe("DeadCoin", function () {
 
     before(async function () {
         ; ({ zeroValue, knownValue, randomValue } = await getTestValues(MAX_TRANSFER_VALUE));
-
-        this.DeadCoin = await ethers.getContractFactory("DeadCoin");
         ; ({ senderAccount, senderAddress, receiverAccount, receiverAddress } = await getAccounts());
     });
 
     beforeEach(async function () {
-        deadCoin = (await deployContract(senderAccount, DeadCoinArtifact)) as DeadCoin;
-        await deadCoin.deployed();
-        console.log(deadCoin);
+        await deployments.fixture(["DeadCoin"]);
+        deadCoin = await ethers.getContract('DeadCoin');
     });
 
     it('reverts when transferring tokens to the zero address', async function () {

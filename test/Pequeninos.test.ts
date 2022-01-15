@@ -2,7 +2,7 @@
 import { expect } from 'chai';
 import { BigNumber } from "ethers";
 import "chai-bn";
-import { ethers } from "hardhat";
+import { deployments, ethers } from "hardhat";
 import {
     constants,
     expectRevert,
@@ -29,14 +29,12 @@ describe("Pequeninos", function () {
 
     before(async function () {
         ; ({ zeroValue, knownValue, randomValue } = await getTestValues(MAX_TRANSFER_VALUE));
-
-        this.Pequeninos = await ethers.getContractFactory("Pequeninos");
         ; ({ senderAccount, senderAddress, receiverAccount, receiverAddress } = await getAccounts());
     });
 
     beforeEach(async function () {
-        pequeninos = (await deployContract(senderAccount, PequeninosArtifact)) as Pequeninos;
-        await pequeninos.deployed();
+        await deployments.fixture(["Pequeninos"]);
+        pequeninos = await ethers.getContract('Pequeninos');
     });
 
     it('reverts when transferring tokens to the zero address', async function () {

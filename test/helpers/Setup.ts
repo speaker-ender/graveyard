@@ -2,7 +2,7 @@
 import { expect } from 'chai';
 import { BigNumber } from "ethers";
 import "chai-bn";
-import { ethers } from "hardhat";
+import { ethers, getNamedAccounts } from "hardhat";
 import hre from 'hardhat'
 import {
     constants,
@@ -19,22 +19,14 @@ export const getNetworkName = () => hre.network.name;
 export const isHardhat = () => getNetworkName() === 'hardhat';
 
 export const getAccounts = async () => {
-    const signers = await ethers.getSigners();
+    const { deployer, user } = await getNamedAccounts();
 
-    return !!process.env.MAIN_ADDRESS && !!process.env.SECONDARY_ADDRESS && !isHardhat() ?
-        {
-            senderAccount: await ethers.getSigner(process.env.MAIN_ADDRESS),
-            senderAddress: process.env.MAIN_ADDRESS || "",
-            receiverAccount: await ethers.getSigner(process.env.SECONDARY_ADDRESS),
-            receiverAddress: process.env.SECONDARY_ADDRESS || ""
-        }
-        :
-        {
-            senderAccount: signers[0],
-            senderAddress: signers[0].address,
-            receiverAccount: signers[1],
-            receiverAddress: signers[1].address
-        }
+    return {
+        senderAccount: await ethers.getSigner(deployer),
+        senderAddress: deployer,
+        receiverAccount: await ethers.getSigner(user),
+        receiverAddress: user
+    }
 }
 
 export const getTestValues = (maxRandomValue: number) => {

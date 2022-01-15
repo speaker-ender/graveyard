@@ -8,6 +8,7 @@ import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-web3";
 import "hardhat-gas-reporter";
+import "hardhat-deploy";
 import "solidity-coverage";
 
 dotenv.config();
@@ -53,6 +54,19 @@ const config: HardhatUserConfig = {
       url: process.env['L2RPC'] || '',
       accounts: process.env['DEVNET_PRIVKEY'] ? [process.env['DEVNET_PRIVKEY']] : [],
     },
+  },
+  namedAccounts: {
+    deployer: {
+      default: 0, // here this will by default take the first account as deployer
+      1: 0, // similarly on mainnet it will take the first account as deployer. Note though that depending on how hardhat network are configured, the account 0 on one network can be different than on another
+      "ropsten": process.env.MAIN_ADDRESS || '',
+      "matic": process.env.MAIN_ADDRESS || '', // but for rinkeby it will be a specific address
+    },
+    user: {
+      default: 1, // here this will by default take the second account as feeCollector (so in the test this will be a different account than the deployer)
+      "ropsten": process.env.SECONDARY_ADDRESS || '',
+      "matic": process.env.SECONDARY_ADDRESS || '', // but for rinkeby it will be a specific address
+    }
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,

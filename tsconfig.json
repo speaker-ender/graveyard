@@ -8,15 +8,16 @@
     "outDir": "dist",
     "resolveJsonModule": true,
     "declaration": true,
-    "paths": {
-      "~/*": [
-        "src/*"
-      ]
-    },
+    // "paths": {
+    //   "~/*": [
+    //     "src/*"
+    //   ]
+    // },
   },
   "include": [
     "scripts",
     "test",
+    "deploy",
     "typechain-types",
     "custom_typings/**/*",
   ],
