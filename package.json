@@ -66,6 +66,8 @@
     "web3": "^1.6.1"
   },
   "workspaces": {
-    "packages": []
+    "packages": [
+      "dapps/dead-coin"
+    ]
   }
 }

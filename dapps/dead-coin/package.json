@@ -1,0 +1,40 @@
+{
+  "name": "dead-coin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DeadCoin",
+  "author": "Speaker Ender",
+  "keywords": [
+    "gatsby"
+  ],
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
+  },
+  "devDependencies": {
+    "@loadable/component": "^5.15.2",
+    "@types/loadable__component": "^5.13.4",
+    "@types/node": "^17.0.8",
+    "@types/react": "17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-helmet": "6.1.5",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "babel-plugin-styled-components": "^2.0.2",
+    "ethers": "^5.5.3",
+    "gatsby": "^4.5.2",
+    "gatsby-plugin-layout": "^3.5.0",
+    "gatsby-plugin-typescript": "^4.5.1",
+    "gatsby-plugin-react-helmet": "^5.5.0",
+    "gatsby-plugin-sitemap": "^5.5.0",
+    "gatsby-plugin-styled-components": "^5.5.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-helmet": "^6.1.0",
+    "styled-components": "^5.3.3"
+  }
+}
