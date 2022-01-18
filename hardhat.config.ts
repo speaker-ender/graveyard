@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 
 import { HardhatUserConfig, task } from "hardhat/config";
+import { NETWORKS } from './chains';
 import "tsconfig-paths/register";
 import "@typechain/hardhat";
 import "@nomiclabs/hardhat-ethers";
@@ -29,43 +30,18 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
   defaultNetwork: 'hardhat',
-  networks: {
-    hardhat: {
-    },
-    ropsten: {
-      url: process.env.ROPSTEN_URL || "",
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    },
-    matic: {
-      url: "https://rpc-mumbai.maticvigil.com",
-      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    },
-    arbitrum: {
-      url: 'https://rinkeby.arbitrum.io/rpc',
-    },
-    arbl1: {
-      gas: 2100000,
-      url: process.env['L1RPC'] || '',
-      accounts: process.env['DEVNET_PRIVKEY'] ? [process.env['DEVNET_PRIVKEY']] : [],
-
-    },
-    arbl2: {
-      url: process.env['L2RPC'] || '',
-      accounts: process.env['DEVNET_PRIVKEY'] ? [process.env['DEVNET_PRIVKEY']] : [],
-    },
-  },
+  networks: NETWORKS,
   namedAccounts: {
     deployer: {
       default: 0, // here this will by default take the first account as deployer
       1: 0, // similarly on mainnet it will take the first account as deployer. Note though that depending on how hardhat network are configured, the account 0 on one network can be different than on another
       "ropsten": process.env.MAIN_ADDRESS || '',
-      "matic": process.env.MAIN_ADDRESS || '', // but for rinkeby it will be a specific address
+      "polygonMumbai": process.env.MAIN_ADDRESS || '', // but for rinkeby it will be a specific address
     },
     user: {
       default: 1, // here this will by default take the second account as feeCollector (so in the test this will be a different account than the deployer)
       "ropsten": process.env.SECONDARY_ADDRESS || '',
-      "matic": process.env.SECONDARY_ADDRESS || '', // but for rinkeby it will be a specific address
+      "polygonMumbai": process.env.SECONDARY_ADDRESS || '', // but for rinkeby it will be a specific address
     }
   },
   gasReporter: {

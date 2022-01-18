@@ -28,14 +28,24 @@ function isExtendedChainInformation(
     return !!(chainInformation as ExtendedChainInformation).nativeCurrency
 }
 
+const getFormattedNetworkName = (name: string) => {
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase().replace(' ', '');
+}
+
+function notUndefined<TValue>(value: TValue | null | undefined): value is TValue {
+    return value !== undefined;
+}
+
 export function getAddChainParameters(chainId: number): AddEthereumChainParameter | number {
     const chainInformation = CHAINS[chainId]
-    if (isExtendedChainInformation(chainInformation)) {
+    const chainUrls: string[] = chainInformation.urls.filter(notUndefined);
+
+    if (isExtendedChainInformation(chainInformation) && chainInformation.urls !== undefined) {
         return {
             chainId,
             chainName: chainInformation.name,
             nativeCurrency: chainInformation.nativeCurrency,
-            rpcUrls: chainInformation.urls,
+            rpcUrls: chainUrls,
             blockExplorerUrls: chainInformation.blockExplorerUrls,
         }
     } else {
@@ -44,6 +54,12 @@ export function getAddChainParameters(chainId: number): AddEthereumChainParamete
 }
 
 export const CHAINS: { [chainId: number]: BasicChainInformation | ExtendedChainInformation } = {
+    0: {
+        urls: [
+            'http://localhost:8545',
+        ],
+        name: 'hardhat',
+    },
     1: {
         urls: [
             process.env.infuraKey ? `https://mainnet.infura.io/v3/${process.env.infuraKey}` : undefined,
@@ -117,19 +133,37 @@ export const CHAINS: { [chainId: number]: BasicChainInformation | ExtendedChainI
         blockExplorerUrls: ['https://polygonscan.com'],
     },
     80001: {
-        urls: [process.env.infuraKey ? `https://polygon-mumbai.infura.io/v3/${process.env.infuraKey}` : undefined],
+        urls: [process.env.infuraKey ? `https://polygon-mumbai.infura.io/v3/${process.env.infuraKey}` : `https://rpc-mumbai.maticvigil.com`],
         name: 'Polygon Mumbai',
         nativeCurrency: MATIC,
         blockExplorerUrls: ['https://mumbai.polygonscan.com'],
     },
 }
 
-export const URLS: { [chainId: number]: string[] } = Object.keys(CHAINS).reduce((accumulator, chainId) => {
-    const validURLs: string[] = CHAINS[Number(chainId)].urls.filter((url) => url)
+type IHardhatObject = {
+    url: string,
+    accounts: string[]
+}
+
+export const NETWORKS: { [chainName: string]: { url: string, accounts: string[] } } = Object.keys(CHAINS).reduce((accumulator, chainId) => {
+    const validURLs: (string | undefined)[] = CHAINS[Number(chainId)].urls.filter((url) => url)
+    const filteredURLs = validURLs.filter(notUndefined);
+    const chainName: string = getFormattedNetworkName(CHAINS[Number(chainId)].name);
 
     if (validURLs.length) {
-        accumulator[chainId] = validURLs
+        accumulator[chainName] = { url: filteredURLs[0], accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [] }
     }
 
     return accumulator
-}, {})
+}, {} as Record<string, IHardhatObject>)
+
+export const URLS: { [chainId: number]: string[] } = Object.keys(CHAINS).reduce((accumulator, chainId) => {
+    const validURLs: (string | undefined)[] = CHAINS[Number(chainId)].urls.filter((url) => url).filter(notUndefined);
+    const filteredURLs = validURLs.filter(notUndefined);
+
+    if (validURLs.length) {
+        accumulator[chainId] = filteredURLs
+    }
+
+    return accumulator
+}, {} as Record<string, string[]>)

@@ -1,7 +1,4 @@
 import * as React from "react"
-import loadable from '@loadable/component';
-import { ethers } from "ethers";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { hooks, metaMask, MetaMaskConnect } from '../connectors/metaMask';
 import { Status } from "./wallet/status";
 import { ChainId } from "./wallet/chainId";

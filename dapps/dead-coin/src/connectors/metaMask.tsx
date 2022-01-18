@@ -2,15 +2,15 @@ import * as React from "react"
 import { initializeConnector, Web3ReactHooks } from '@web3-react/core'
 import { MetaMask } from '@web3-react/metamask'
 import { useCallback, useState } from 'react'
-import { getAddChainParameters } from '../chains'
+import { getAddChainParameters } from '../../../../chains'
 import { MetaMaskSelect } from '../components/wallet/metamask/select'
-import { address, } from '../../../../deployments/localhost/DeadCoin.json'
+import { address } from '../../../../deployments/localhost/DeadCoin.json'
 
 export const [metaMask, hooks, store] = initializeConnector<MetaMask>((actions) => new MetaMask(actions))
 
 export const MetaMaskConnect = ({
   connector,
-  hooks: { useChainId, useIsActivating, useError, useIsActive, useProvider },
+  hooks: { useChainId, useIsActivating, useError, useIsActive },
 }: {
   connector: MetaMask
   hooks: Web3ReactHooks
@@ -19,7 +19,6 @@ export const MetaMaskConnect = ({
   const isActivating = useIsActivating()
   const error = useError()
   const active = useIsActive()
-  const { provider } = useProvider();
   const [addTokenSuccess, setAddTokenSuccess] = useState<boolean | undefined>()
 
   const token = {
@@ -43,7 +42,9 @@ export const MetaMaskConnect = ({
   )
 
   const addToken = useCallback(() => {
-    if (provider.isMetaMask && provider.request && token) {
+    const { provider } = useProvider();
+
+    if (window && provider.isMetaMask && !!provider.request && token) {
       provider
         .request({
           method: 'wallet_watchAsset',
@@ -66,7 +67,7 @@ export const MetaMaskConnect = ({
     } else {
       setAddTokenSuccess(false)
     }
-  }, [provider, token])
+  }, [token])
 
   if (error) {
     return (

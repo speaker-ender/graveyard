@@ -11,15 +11,15 @@
   "scripts": {
     "run node": "NODE_OPTIONS=--openssl-legacy-provider hardhat node",
     "compile": "NODE_OPTIONS=--openssl-legacy-provider hardhat compile",
-    "compile matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat compile --network matic",
+    "compile matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat compile --network polygonMumbai",
     "clean types": "NODE_OPTIONS=--openssl-legacy-provider hardhat clean",
     "clean and compile": "NODE_OPTIONS=--openssl-legacy-provider hardhat clean && NODE_OPTIONS=--openssl-legacy-provider hardhat compile",
     "test": "NODE_OPTIONS=--openssl-legacy-provider hardhat test",
-    "test matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat test --network matic",
+    "test matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat test --network polygonMumbai",
     "deploy own script": "NODE_OPTIONS=--openssl-legacy-provider hardhat run ./scripts/deploy.ts --network localhost",
     "deploy script": "NODE_OPTIONS=--openssl-legacy-provider hardhat deploy",
-    "deploy own script matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat run ./scripts/deploy.ts --network matic",
-    "deploy script matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat deploy --network matic",
+    "deploy own script matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat run ./scripts/deploy.ts --network polygonMumbai",
+    "deploy script matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat deploy --network polygonMumbai",
     "accounts": "NODE_OPTIONS=--openssl-legacy-provider hardhat accounts"
   },
   "devDependencies": {
@@ -37,6 +37,7 @@
     "@types/node": "^17.0.8",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
+    "@web3-react/metamask": "^8.0.0-beta.0",
     "arb-ts": "^1.0.0-beta.4",
     "chai": "^4.2.0",
     "chai-bn": "^0.3.0",
