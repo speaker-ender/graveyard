@@ -140,6 +140,22 @@
             "cwd": "${workspaceFolder}/",
             "console": "integratedTerminal",
             "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Start DeadCoin Gatsby Client",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "develop",
+                "-w",
+                "deadcoin"
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
         }
     ]
 }

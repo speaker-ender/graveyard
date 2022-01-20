@@ -10,7 +10,7 @@ export const [metaMask, hooks, store] = initializeConnector<MetaMask>((actions) 
 
 export const MetaMaskConnect = ({
   connector,
-  hooks: { useChainId, useIsActivating, useError, useIsActive },
+  hooks: { useChainId, useIsActivating, useError, useIsActive, useProvider },
 }: {
   connector: MetaMask
   hooks: Web3ReactHooks
@@ -19,6 +19,9 @@ export const MetaMaskConnect = ({
   const isActivating = useIsActivating()
   const error = useError()
   const active = useIsActive()
+  const currentProvider = useProvider();
+
+  const [desiredChainId, setDesiredChainId] = useState<number>(-1)
   const [addTokenSuccess, setAddTokenSuccess] = useState<boolean | undefined>()
 
   const token = {
@@ -27,9 +30,6 @@ export const MetaMaskConnect = ({
     decimals: 10,
     image: ''
   }
-
-
-  const [desiredChainId, setDesiredChainId] = useState<number>(-1)
 
   const setChainId = useCallback(
     (chainId: number) => {
@@ -42,10 +42,9 @@ export const MetaMaskConnect = ({
   )
 
   const addToken = useCallback(() => {
-    const { provider } = useProvider();
 
-    if (window && provider.isMetaMask && !!provider.request && token) {
-      provider
+    if (window && active && currentProvider.provider.isMetaMask && !!currentProvider.provider.request && token) {
+      currentProvider.provider
         .request({
           method: 'wallet_watchAsset',
           params: {
