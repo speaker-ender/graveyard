@@ -30,7 +30,7 @@ describe("DeadCoin", function () {
     let receiverAccount: SignerWithAddress;
 
     before(async function () {
-        ; ({ zeroValue, knownValue, randomValue } = await getTestValues(MAX_TRANSFER_VALUE));
+        ; ({ zeroValue, knownValue, randomValue } = getTestValues(MAX_TRANSFER_VALUE));
         ; ({ senderAccount, senderAddress, receiverAccount, receiverAddress } = await getAccounts());
     });
 

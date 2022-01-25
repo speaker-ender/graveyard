@@ -1,4 +1,4 @@
-// test/Formic.test.js
+// test/FormicFactory.test.js
 import { expect } from 'chai';
 import { BigNumber } from "ethers";
 import "chai-bn";
@@ -27,7 +27,7 @@ describe("FormicFactory", function () {
     let receiverAccount: SignerWithAddress;
 
     before(async function () {
-        ; ({ zeroValue, knownValue, randomValue } = await getTestValues(MAX_SUPPLY));
+        ; ({ zeroValue, knownValue, randomValue } = getTestValues(MAX_SUPPLY));
         ; ({ senderAccount, senderAddress, receiverAccount, receiverAddress } = await getAccounts());
     });
 

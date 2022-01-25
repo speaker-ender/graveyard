@@ -27,7 +27,7 @@ export const MetaMaskConnect = ({
   const token = {
     address: address,
     symbol: 'DEAD',
-    decimals: 10,
+    decimals: 18,
     image: ''
   }
 

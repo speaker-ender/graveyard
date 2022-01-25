@@ -29,7 +29,7 @@ interface IERC721Factory {
      */
     function canMint() external view returns (bool);
 
-    function canMint(uint256 _mint_count) external view returns (bool);
+    function canMint(uint256 _mintCount) external view returns (bool);
 
     /**
      * @dev Returns a URL specifying some metadata about the option. This metadata can be of the
@@ -50,5 +50,5 @@ interface IERC721Factory {
      */
     function mint(address _toAddress) external;
 
-    function mint(address _toAddress, uint256 _formic_count) external;
+    function mint(address _toAddress, uint256 _formicCount) external;
 }

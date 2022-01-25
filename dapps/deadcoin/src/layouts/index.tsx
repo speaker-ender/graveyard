@@ -9,6 +9,7 @@ const MetaMask = loadable(() => import('../components/metamask'));
 const Layout = (props) => {
     return (
         <main>
+            <h1>DeadCoin</h1>
             <MetaMask />
             <MetaMaskComponent />
             {props.children}

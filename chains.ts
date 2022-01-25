@@ -32,7 +32,7 @@ const getFormattedNetworkName = (name: string) => {
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase().replace(' ', '');
 }
 
-function notUndefined<TValue>(value: TValue | null | undefined): value is TValue {
+export function notUndefined<TValue>(value: TValue | null | undefined): value is TValue {
     return value !== undefined;
 }
 

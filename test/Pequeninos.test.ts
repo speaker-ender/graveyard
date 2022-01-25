@@ -7,8 +7,6 @@ import {
     constants,
     expectRevert,
 } from "@openzeppelin/test-helpers";
-import { deployContract } from 'ethereum-waffle';
-import PequeninosArtifact from '../artifacts/contracts/Pequeninos.sol/Pequeninos.json'
 import { Pequeninos } from 'typechain-types';
 import { getAccounts, getTestValues } from './helpers/Setup';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
@@ -28,7 +26,7 @@ describe("Pequeninos", function () {
     let receiverAccount: SignerWithAddress;
 
     before(async function () {
-        ; ({ zeroValue, knownValue, randomValue } = await getTestValues(MAX_TRANSFER_VALUE));
+        ; ({ zeroValue, knownValue, randomValue } = getTestValues(MAX_TRANSFER_VALUE));
         ; ({ senderAccount, senderAddress, receiverAccount, receiverAddress } = await getAccounts());
     });
 

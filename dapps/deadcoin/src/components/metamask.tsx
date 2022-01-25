@@ -2,14 +2,13 @@ import * as React from "react"
 import loadable from '@loadable/component';
 import { ethers } from "ethers";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { address } from '../../../../deployments/localhost/DeadCoin.json';
 
 const Ethers = loadable.lib(() => import('ethers'));
 
 interface IWindow extends Window {
     ethereum?: any
 }
-
-const HARDHAT_NETWORK_ID = '31337';
 
 const MetaMask = () => {
     let ethersjs = useRef<typeof ethers>(null);
@@ -77,11 +76,11 @@ const MetaMask = () => {
     }, [provider, maybeUpdateNetwork]);
 
     const addToken = useCallback(async () => {
-        const tokenAddress = 'asdf';
+        const tokenAddress = address;
         const tokenSymbol = 'DEAD';
-        const tokenDecimals = '10000';
-        const tokenImage = 'url.com';
-        provider.jsonRpcFetchFunc
+        const tokenDecimals = 18;
+        const tokenImage = '';
+        // provider.jsonRpcFetchFunc
 
         const params = [{
             type: "ERC20",

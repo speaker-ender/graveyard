@@ -1,6 +1,6 @@
 // test/Formic.test.js
 import { expect } from 'chai';
-import { BigNumber, ContractTransaction } from "ethers";
+import { BigNumber } from "ethers";
 import "chai-bn";
 import { deployments, ethers } from "hardhat";
 import {
@@ -28,7 +28,7 @@ describe("Formic", function () {
     let receiverAccount: SignerWithAddress;
 
     before(async function () {
-        ; ({ zeroValue, knownValue, randomValue } = await getTestValues(MAX_SUPPLY));
+        ; ({ zeroValue, knownValue, randomValue } = getTestValues(MAX_SUPPLY));
         ; ({ senderAccount, senderAddress, receiverAccount, receiverAddress } = await getAccounts());
     });
 

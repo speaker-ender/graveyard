@@ -70,7 +70,7 @@ contract FormicFactory is IERC721Factory, Ownable {
         }
     }
 
-    function mint(address _toAddress, uint256 _formic_count) public override {
+    function mint(address _toAddress, uint256 _formicCount) public override {
         // Must be sent from the owner proxy or owner.
         ProxyRegistry proxyRegistry = ProxyRegistry(proxyRegistryAddress);
         assert(
@@ -80,12 +80,12 @@ contract FormicFactory is IERC721Factory, Ownable {
         );
 
         require(
-            canMint(_formic_count),
-            "FormicFactory: mint count greater than available supply"
+            canMint(_formicCount),
+            "FormicFactory: mint count more than available"
         );
 
         Formic formic = Formic(nftAddress);
-        for (uint256 i = 0; i < _formic_count; i++) {
+        for (uint256 i = 0; i < _formicCount; i++) {
             formic.mintTo(_toAddress);
         }
     }
@@ -94,11 +94,11 @@ contract FormicFactory is IERC721Factory, Ownable {
         mint(_toAddress, 1);
     }
 
-    function canMint(uint256 _mint_count) public view override returns (bool) {
+    function canMint(uint256 _mintCount) public view override returns (bool) {
         Formic formic = Formic(nftAddress);
         uint256 formicSupply = formic.totalSupply();
 
-        return _mint_count <= (FORMIC_SUPPLY - formicSupply);
+        return _mintCount <= (FORMIC_SUPPLY - formicSupply);
     }
 
     function canMint() public view override returns (bool) {
