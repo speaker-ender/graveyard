@@ -1,27 +1,40 @@
 import * as React from "react"
 import { useDeadCoinContract } from "../hooks/useContracts";
 import { Web3ReactHooks } from "@web3-react/core";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BigNumber } from "ethers";
 
 const Contracts: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
     const deadCoinContract = useDeadCoinContract({ hooks: props.hooks });
     const account = props.hooks.useAccount();
     const [balance, setBalance] = useState<BigNumber>(null!);
+    const [symbol, setSymbol] = useState<string>(null!);
 
 
     const getBalance = async (account: string) => {
-        return await deadCoinContract.balanceOf(account);
+        const accountBalance = await deadCoinContract.balanceOf(account);
+        const coinDecimals = await deadCoinContract.decimals();
+        const denom = BigNumber.from(Math.pow(10, coinDecimals).toString());
+        return accountBalance.div(denom);
     }
 
     const updateBalance = useCallback(async (account: string) => {
         setBalance(await getBalance(account));
     }, [balance, setBalance]);
 
-    useEffect(() => {
-        // updateContracts(useContract(DeadCoinAddress, DeadCoinABI, library));
-        account && updateBalance(account);
+    const updateSymbol = useCallback(async () => {
+        setSymbol(await deadCoinContract.symbol());
+    }, [balance, setBalance]);
 
+    useEffect(() => {
+        account && updateBalance(account);
+        return () => {
+        }
+    }, [account])
+
+    useEffect(() => {
+        account && updateBalance(account);
+        updateSymbol();
         return () => {
         }
     }, [])
@@ -33,7 +46,7 @@ const Contracts: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
                 <div>
                     <h5>{`Contract Address: ${deadCoinContract.address}`}</h5>
                     {!!balance &&
-                        <p>{`DeadCoin Balance: ${balance.toBigInt().toLocaleString()}`}</p>
+                        <p>{`Balance: ${balance.toBigInt().toLocaleString()} ${symbol}`}</p>
                     }
                 </div>
             }

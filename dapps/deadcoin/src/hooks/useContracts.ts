@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Web3ReactHooks } from "@web3-react/core"
-import { abi as DeadCoinABI, address as DeadCoinAddress } from '../../../../deployments/localhost/DeadCoin.json';
+import * as DeadCoinLocal from '../../../../deployments/localhost/DeadCoin.json';
 import { Contract } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import { Web3Provider } from "@ethersproject/providers";
@@ -32,7 +32,7 @@ export const useDeadCoinContract = ({ hooks: { useChainId, useProvider, useWeb3R
     const currentProvider = useProvider();
     const { library, account } = useWeb3React(currentProvider);
 
-    return useContract(DeadCoinAddress, DeadCoinABI, library) as DeadCoin;
+    return useContract(DeadCoinLocal.address, DeadCoinLocal.abi, library) as DeadCoin;
 }
 
 export const useContracts = ({ hooks: { useChainId, useProvider, useWeb3React } }: { hooks: Web3ReactHooks }) => {
@@ -46,7 +46,7 @@ export const useContracts = ({ hooks: { useChainId, useProvider, useWeb3React } 
     }, [contracts, setContracts]);
 
     useEffect(() => {
-        const newContract = useContract(DeadCoinAddress, DeadCoinABI, library);
+        const newContract = useContract(DeadCoinLocal.address, DeadCoinLocal.abi, library);
         console.log(newContract);
         // updateContracts(useContract(DeadCoinAddress, DeadCoinABI, library));
 
