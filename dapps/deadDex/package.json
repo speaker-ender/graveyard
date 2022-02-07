@@ -1,0 +1,46 @@
+{
+  "name": "dead-dex",
+  "version": "1.0.0",
+  "author": "3nder",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@loadable/component": "^5.15.2",
+    "@maticnetwork/maticjs": "^3.2.2",
+    "@maticnetwork/walletconnect-provider": "0.0.1-beta.1",
+    "@web3-react/core": "8.0.1-beta.0",
+    "@web3-react/frame": "8.0.0-beta.0",
+    "@web3-react/magic": "8.0.0-beta.0",
+    "@web3-react/metamask": "8.0.1-beta.0",
+    "@web3-react/network": "8.0.0-beta.0",
+    "@web3-react/store": "8.0.0-beta.0",
+    "@web3-react/types": "8.0.0-beta.0",
+    "@web3-react/walletconnect": "8.0.1-beta.0",
+    "@web3-react/walletlink": "8.0.1-beta.0",
+    "ethers": "^5.5.3",
+    "next": "^12.0.10",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "sass": "^1.49.0",
+    "styled-components": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/loadable__component": "^5.13.4",
+    "@types/next": "^9.0.0",
+    "@types/node": "^17.0.16",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-helmet": "^6.1.5",
+    "@types/styled-components": "^5.1.21",
+    "babel-plugin-styled-components": "^2.0.2",
+    "eslint": "8.8.0",
+    "eslint-config-next": "12.0.10",
+    "typescript": "4.5.5"
+  }
+}

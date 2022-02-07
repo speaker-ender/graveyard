@@ -22,7 +22,10 @@
     "deploy script matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat deploy --network polygonMumbai",
     "accounts": "NODE_OPTIONS=--openssl-legacy-provider hardhat accounts",
     "clientWalletSetup": "NODE_OPTIONS=--openssl-legacy-provider hardhat clientWalletSetup",
-    "start deadCoin gatsby client": "npm run develop -w deadcoin"
+    "start deadCoin gatsby client": "npm run develop -w deadcoin",
+    "start deadDex client": "npm run dev -w dead-dex",
+    "build deadDex client": "npm run build -w dead-dex",
+    "start deadDex production": "npm start -w dead-dex"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13",
@@ -70,6 +73,7 @@
     "web3": "^1.6.1"
   },
   "workspaces": [
-    "dapps/deadcoin"
+    "dapps/deadcoin",
+    "dapps/deadDex"
   ]
 }

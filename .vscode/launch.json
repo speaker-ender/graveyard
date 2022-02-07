@@ -154,6 +154,20 @@
             "cwd": "${workspaceFolder}/",
             "console": "integratedTerminal",
             "args": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Start DeadDex Client",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "start deadDex client",
+            ],
+            "outputCapture": "std",
+            "cwd": "${workspaceFolder}/",
+            "console": "integratedTerminal",
+            "args": []
         }
     ]
 }
