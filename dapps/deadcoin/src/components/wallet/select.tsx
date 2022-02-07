@@ -1,5 +1,5 @@
 import * as React from "react"
-import { CHAINS, URLS } from "../../../../../../chains"
+import { CHAINS, URLS } from "../../../../../chains"
 
 export const MetaMaskSelect = ({ chainId, setChainId }: { chainId: number; setChainId?: (chainId: number) => void }) => {
     return (

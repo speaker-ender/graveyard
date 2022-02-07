@@ -1,7 +1,8 @@
 # Graveyard
-## Description
-Welcome to my crypto starter framework. This is a monorepo for developing anything and everything for crypto.  
-While this is currently under development, the goals are as follows:
+<img src="https://img.shields.io/badge/status-development-yellow" />
+
+### Welcome to my crypto starter framework. This is a monorepo for developing anything and everything for crypto.  
+## While this is currently under development, the goals are as follows:
 - Starter Contracts for each token standard
 - Extensions to add functionality for starter contracts
 - Using strongly typed languages and extensive testing
@@ -17,7 +18,6 @@ I will update my goals as I continue development
 - Matic/Polygon
 
 ### Future
-- [ ] Solana
 - [ ] Avalanche
 - [ ] Arbitrum
 - [ ] Harmony

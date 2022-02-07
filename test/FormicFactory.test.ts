@@ -64,7 +64,7 @@ describe("FormicFactory", function () {
 
         await expectRevert(
             formicFactory["mint(address,uint256)"](senderAddress, BigNumber.from(51)),
-            'FormicFactory: mint count greater than available supply',
+            'FormicFactory: mint count more than available',
         );
     });
 

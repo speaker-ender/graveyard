@@ -10,7 +10,7 @@ const Layout = (props) => {
     return (
         <main>
             <h1>DeadCoin</h1>
-            <MetaMask />
+            {/* <MetaMask /> */}
             <MetaMaskComponent />
             {props.children}
         </main>
