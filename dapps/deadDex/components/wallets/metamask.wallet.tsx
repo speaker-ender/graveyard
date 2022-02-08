@@ -7,6 +7,8 @@ import { Accounts } from "./parts/accounts";
 import { useCallback, useEffect, useState } from "react";
 import { lightOrDark } from "../../helpers/theme.helpers";
 import DeadCoinContract from "../contracts/deadCoin";
+import { StyledMetaMaskWallet } from "./metamask.wallet.styles";
+import MediumRareStakeContract from "../contracts/mediumRareStake";
 
 const MetaMaskWallet = () => {
     const account = hooks.useAccount();
@@ -41,14 +43,14 @@ const MetaMaskWallet = () => {
     }, [account, setAccountColor])
 
     return (
-        <div style={{ 'backgroundColor': accountColor, 'color': textColor }}>
-            <h2>Web3 React Connections</h2>
+        <StyledMetaMaskWallet style={{ 'backgroundColor': accountColor, 'color': textColor }}>
             <Status connector={metaMask} hooks={hooks} />
             <CurrentChain hooks={hooks} />
             <Accounts hooks={hooks} />
             <MetaMaskControls connector={metaMask} hooks={hooks} />
             <DeadCoinContract hooks={hooks} />
-        </div>
+            <MediumRareStakeContract hooks={hooks} />
+        </StyledMetaMaskWallet>
     )
 }
 

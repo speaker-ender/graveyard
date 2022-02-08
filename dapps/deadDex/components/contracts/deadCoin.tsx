@@ -19,18 +19,19 @@ const DeadCoinContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
     }
 
     const updateBalance = useCallback(async (account: string) => {
-        setBalance(await getBalance(account));
-    }, [balance, setBalance]);
+        deadCoinContract && setBalance(await getBalance(account));
+    }, [deadCoinContract, balance, setBalance]);
 
     const updateSymbol = useCallback(async () => {
-        setSymbol(await deadCoinContract.symbol());
-    }, [balance, setBalance]);
+        deadCoinContract && setSymbol(await deadCoinContract.symbol());
+    }, [deadCoinContract, balance, setBalance]);
 
     useEffect(() => {
         account && updateBalance(account);
+        updateSymbol();
         return () => {
         }
-    }, [account])
+    }, [account, deadCoinContract])
 
     useEffect(() => {
         account && updateBalance(account);

@@ -4,7 +4,7 @@ import { CHAINS, URLS } from "../../../../../chains";
 export const MetaMaskSelect = ({ chainId, setChainId }: { chainId: number; setChainId?: (chainId: number) => void }) => {
     return (
         <label>
-            Chain:{' '}
+            Chain:{chainId + ' '}
             <select
                 value={`${chainId}`}
                 onChange={

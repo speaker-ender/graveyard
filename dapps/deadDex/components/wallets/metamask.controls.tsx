@@ -82,7 +82,9 @@ export const MetaMaskControls = ({
         return (
             <>
                 {/* TODO: Fix chainID to make more sense */}
-                <MetaMaskSelect chainId={desiredChainId === -1 ? -1 : (currentChainId || -1)} setChainId={setChainId} />
+                {currentChainId &&
+                    <MetaMaskSelect chainId={desiredChainId === -1 ? -1 : currentChainId} setChainId={setChainId} />
+                }
                 <br />
                 <button onClick={() => addToken()} disabled={addTokenSuccess}>Add DeadCoin To Wallet</button>
             </>
