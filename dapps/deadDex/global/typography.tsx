@@ -25,6 +25,11 @@ export const Header3 = styled.h3`
     text-transform: uppercase;
 `;
 
+export const Header5 = styled.h5`
+    font-family: ${FONTS.mainBold};
+    font-size: 1.2rem;
+`;
+
 export const Paragraph = styled.p`
     font-family: ${FONTS.main};
     font-size: 1rem; 

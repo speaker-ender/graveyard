@@ -17,7 +17,7 @@
     "test": "NODE_OPTIONS=--openssl-legacy-provider hardhat test",
     "test matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat test --network polygonMumbai",
     "deploy own script": "NODE_OPTIONS=--openssl-legacy-provider hardhat run ./scripts/deploy.ts --network localhost",
-    "deploy script": "NODE_OPTIONS=--openssl-legacy-provider hardhat deploy",
+    "deploy script": "NODE_OPTIONS=--openssl-legacy-provider hardhat deploy --export-all ./deployments/deployments.json",
     "deploy own script matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat run ./scripts/deploy.ts --network polygonMumbai",
     "deploy script matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat deploy --network polygonMumbai",
     "accounts": "NODE_OPTIONS=--openssl-legacy-provider hardhat accounts",

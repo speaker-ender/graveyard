@@ -3,6 +3,7 @@ import { useDeadCoinContract } from "../../hooks/contracts/deadCoin.hooks";
 import { Web3ReactHooks } from "@web3-react/core";
 import { useCallback, useEffect, useState } from "react";
 import { BigNumber } from "ethers";
+import { ContractDetails } from "./parts/details";
 
 const DeadCoinContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
     const deadCoinContract = useDeadCoinContract({ hooks: props.hooks });
@@ -12,18 +13,18 @@ const DeadCoinContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
 
 
     const getBalance = async (account: string) => {
-        const accountBalance = await deadCoinContract.balanceOf(account);
-        const coinDecimals = await deadCoinContract.decimals();
+        const accountBalance = await (!!deadCoinContract ? deadCoinContract.balanceOf(account) : BigNumber.from(0));
+        const coinDecimals = await (!!deadCoinContract ? deadCoinContract.decimals() : 0);
         const denom = BigNumber.from(Math.pow(10, coinDecimals).toString());
         return accountBalance.div(denom);
     }
 
     const updateBalance = useCallback(async (account: string) => {
-        deadCoinContract && setBalance(await getBalance(account));
+        !!deadCoinContract && setBalance(await getBalance(account));
     }, [deadCoinContract, balance, setBalance]);
 
     const updateSymbol = useCallback(async () => {
-        deadCoinContract && setSymbol(await deadCoinContract.symbol());
+        !!deadCoinContract && setSymbol(await deadCoinContract.symbol());
     }, [deadCoinContract, balance, setBalance]);
 
     useEffect(() => {
@@ -42,10 +43,11 @@ const DeadCoinContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
 
     return (
         <div>
-            <h3>DeadCoin Contract</h3>
+            {!!deadCoinContract &&
+                <ContractDetails {...deadCoinContract} showLockedEthValue={true} />
+            }
             {!!deadCoinContract &&
                 <div>
-                    <h5>{`Contract Address: ${deadCoinContract.address}`}</h5>
                     {!!balance &&
                         <p>{`Balance: ${balance.toBigInt().toLocaleString()} ${symbol}`}</p>
                     }
