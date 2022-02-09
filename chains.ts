@@ -54,7 +54,7 @@ export function getAddChainParameters(chainId: number): AddEthereumChainParamete
 }
 
 export const CHAINS: { [chainId: number]: BasicChainInformation | ExtendedChainInformation } = {
-    1337: {
+    31337: {
         urls: [
             'http://localhost:8545',
         ],

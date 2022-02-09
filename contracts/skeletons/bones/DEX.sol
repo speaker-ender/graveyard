@@ -7,6 +7,7 @@ import "../../DeadCoin.sol";
 contract DEX is Ownable {
     DeadCoin public deadCoin;
     uint256 public constant TOKENS_PER_ETH = 100;
+    uint256 public constant FEE_DENOM = 1000;
 
     event BuyTokens(address buyer, uint256 amountOfEth, uint256 amountOfTokens);
 
@@ -23,6 +24,10 @@ contract DEX is Ownable {
     modifier isOwner() {
         require(owner() == msg.sender, "Not Owner");
         _;
+    }
+
+    function calcFee(uint256 tradeAmount) public pure returns (uint256) {
+        return tradeAmount * (1 / FEE_DENOM);
     }
 
     function buyTokens() public payable {
