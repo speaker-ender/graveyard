@@ -11,7 +11,7 @@ const DeadCoinContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
     const account = props.hooks.useAccount();
     const [balance, setBalance] = useState<BigNumber>(null!);
     const [symbol, setSymbol] = useState<string>(null!);
-    deadCoinContract.interface.functions["balanceOf(address)"].inputs
+    // deadCoinContract.interface.functions["balanceOf(address)"].inputs
 
     const getBalance = async (account: string) => {
         const accountBalance = await (!!deadCoinContract ? deadCoinContract.balanceOf(account) : BigNumber.from(0));
@@ -45,17 +45,16 @@ const DeadCoinContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
     return (
         <div>
             {!!deadCoinContract &&
-                <ContractDetails {...deadCoinContract} showLockedEthValue={true} />
+                <>
+                    <ContractDetails {...deadCoinContract} showLockedEthValue={true} />
+                    <div>
+                        {!!balance &&
+                            <p>{`Balance: ${balance.toBigInt().toLocaleString()} ${symbol}`}</p>
+                        }
+                    </div>
+                    <FunctionFactory contract={deadCoinContract} fragments={deadCoinContract.interface.functions} />
+                </>
             }
-            {!!deadCoinContract &&
-                <div>
-                    {!!balance &&
-                        <p>{`Balance: ${balance.toBigInt().toLocaleString()} ${symbol}`}</p>
-                    }
-                </div>
-            }
-            <FunctionFactory contract={deadCoinContract} fragments={deadCoinContract.interface.functions} />
-
         </div>
     )
 }

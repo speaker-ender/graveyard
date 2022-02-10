@@ -9,7 +9,7 @@ export const useMediumRareStakeContract = ({ hooks: { useChainId, useProvider, u
     const { library, account } = useWeb3React(currentProvider);
 
     const contracts = loadContracts(chainId);
-    const MediumRareStakeLocal = contracts['MediumRareStake'];
+    const MediumRareStakeLocal = contracts ? contracts['MediumRareStake'] : undefined;
 
-    return useContract(MediumRareStakeLocal.address, MediumRareStakeLocal.abi, library, account) as MediumRareStake;
+    return MediumRareStakeLocal ? useContract(MediumRareStakeLocal.address, MediumRareStakeLocal.abi, library, account) as MediumRareStake : undefined;
 }

@@ -16,7 +16,7 @@ const MediumRareStakeContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => 
 
 
     const getBalance = async (account: string) => {
-        const accountBalance = await mediumRareStakeContract.balances(account);
+        const accountBalance = await (!!mediumRareStakeContract ? mediumRareStakeContract.balances(account) : BigNumber.from(0));
         const denom = BigNumber.from(Math.pow(10, 18).toString());
         return accountBalance.div(denom);
     }
@@ -28,9 +28,8 @@ const MediumRareStakeContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => 
     const tryStake = useCallback(async (event: React.FormEvent) => {
         event.preventDefault();
         const amount = stakeAmount.current.value;
-        console.log(mediumRareStakeContract.contractName);
-        const receipt = await mediumRareStakeContract.stake({ value: ethers.utils.parseEther(amount) });
-        console.log(receipt);
+
+        const receipt = !!mediumRareStakeContract && await mediumRareStakeContract.stake({ value: ethers.utils.parseEther(amount) });
 
     }, [mediumRareStakeContract, stakeAmount, chainId]);
 

@@ -19,11 +19,11 @@ interface IDeployments {
     [contractName: string]: Deployment
 }
 
-const DEFAULT_CHAIN_ID = 31337;
+export const DEFAULT_CHAIN_ID = 31337;
 
-export const loadContracts = (chainId: number) => {
+export const loadContracts = (chainId?: number) => {
     const typedContracts = Contracts as IDeployedContracts;
-    const contractsByChain = typedContracts[chainId];
+    const contractsByChain = typedContracts[chainId || DEFAULT_CHAIN_ID];
     const chainName = CHAINS[chainId || DEFAULT_CHAIN_ID] ? CHAINS[chainId || DEFAULT_CHAIN_ID].name.toLowerCase() : undefined;
 
     if (!!contractsByChain && !!chainName) {
@@ -37,7 +37,7 @@ export const useContracts = ({ hooks: { useChainId } }: { hooks: Web3ReactHooks 
     const chainId = useChainId();
     let contracts: IDeployments = {};
 
-    const loadedContracts = loadContracts(chainId || DEFAULT_CHAIN_ID)
+    const loadedContracts = loadContracts(chainId)
 
     for (const [key, value] of Object.entries(!!loadedContracts ? loadedContracts : {})) {
         contracts[key] = value;

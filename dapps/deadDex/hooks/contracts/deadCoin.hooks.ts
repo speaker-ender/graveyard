@@ -9,7 +9,7 @@ export const useDeadCoinContract = ({ hooks: { useChainId, useProvider, useWeb3R
     const { library } = useWeb3React(currentProvider);
 
     const contracts = loadContracts(chainId);
-    const DeadCoinLocal = contracts['DeadCoin'];
+    const DeadCoinLocal = contracts ? contracts['DeadCoin'] : undefined;
 
-    return useContract(DeadCoinLocal.address, DeadCoinLocal.abi, library) as DeadCoin;
+    return DeadCoinLocal ? useContract(DeadCoinLocal.address, DeadCoinLocal.abi, library) as DeadCoin : undefined;
 }

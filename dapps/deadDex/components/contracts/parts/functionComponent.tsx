@@ -26,9 +26,10 @@ export const FunctionComponent: FC<IContractDetails> = (props) => {
     const trySubmit = useCallback(async (event: React.FormEvent, functionName: string) => {
         event.preventDefault();
         const passedProps = functionState ? Object.entries(functionState).map(([key, input]) => input) : [];
-        console.log(passedProps)
+        console.log(passedProps);
         console.log(functionName);
-        // Contract.
+        console.log(props.contract.interface);
+
         const receipt = await props.contract[functionName](...passedProps);
         setResultState(receipt);
         // const receipt = await props.contract[functionName]({ value: ethers.utils.parseEther(amount) });
