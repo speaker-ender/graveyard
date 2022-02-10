@@ -9,6 +9,7 @@ import { lightOrDark } from "../../helpers/theme.helpers";
 import DeadCoinContract from "../contracts/deadCoin";
 import { StyledMetaMaskWallet } from "./metamask.wallet.styles";
 import MediumRareStakeContract from "../contracts/mediumRareStake";
+import ContractFactory from "../contracts/contractFactory";
 
 const MetaMaskWallet = () => {
     const account = hooks.useAccount();
@@ -48,8 +49,9 @@ const MetaMaskWallet = () => {
             <CurrentChain hooks={hooks} />
             <Accounts hooks={hooks} />
             <MetaMaskControls connector={metaMask} hooks={hooks} />
-            <DeadCoinContract hooks={hooks} />
-            <MediumRareStakeContract hooks={hooks} />
+            {/* <DeadCoinContract hooks={hooks} />
+            <MediumRareStakeContract hooks={hooks} /> */}
+            <ContractFactory hooks={hooks} />
         </StyledMetaMaskWallet>
     )
 }

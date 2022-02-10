@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { BigNumber, ethers } from "ethers";
 import { useRef } from "react";
 import { ContractDetails } from "./parts/details";
+import { FunctionFactory } from "./parts/functionFactory";
 
 const MediumRareStakeContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
     const mediumRareStakeContract = useMediumRareStakeContract({ hooks: props.hooks });
@@ -27,6 +28,7 @@ const MediumRareStakeContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => 
     const tryStake = useCallback(async (event: React.FormEvent) => {
         event.preventDefault();
         const amount = stakeAmount.current.value;
+        console.log(mediumRareStakeContract.contractName);
         const receipt = await mediumRareStakeContract.stake({ value: ethers.utils.parseEther(amount) });
         console.log(receipt);
 
@@ -44,18 +46,16 @@ const MediumRareStakeContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => 
         }
     }, [])
 
-    const functionFactory = () => {
-
-    }
-
     return (
         <div>
             {!!mediumRareStakeContract &&
                 <div>
+                    <ContractDetails {...mediumRareStakeContract} showLockedEthValue={true} />
+
                     {!!stakedBalance &&
                         <p>{`Staked Balance: ${stakedBalance.toBigInt().toLocaleString()} ETH`}</p>
                     }
-                    <ContractDetails {...mediumRareStakeContract} showLockedEthValue={true} />
+                    <FunctionFactory contract={mediumRareStakeContract} fragments={mediumRareStakeContract.interface.functions} />
                     <form onSubmit={(e) => tryStake(e)}>
                         <label htmlFor="stakeAmount">Stake Amount in ETH</label>
                         <input name="stakeAmount" type="number" ref={stakeAmount} />

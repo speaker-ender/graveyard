@@ -1,6 +1,4 @@
 import { Web3ReactHooks } from "@web3-react/core"
-// import * as DeadCoinLocal from '../../../../deployments/localhost/DeadCoin.json';
-import { DeadCoin } from '../../../../typechain-types';
 import { useContract } from "../../hooks/contract.hooks";
 import { Deployment } from 'hardhat-deploy/types';
 import * as Contracts from '../../../../deployments/deployments.json';

@@ -4,6 +4,7 @@ import { Web3ReactHooks } from "@web3-react/core";
 import { useCallback, useEffect, useState } from "react";
 import { BigNumber } from "ethers";
 import { ContractDetails } from "./parts/details";
+import { FunctionFactory } from "./parts/functionFactory";
 
 const DeadCoinContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
     const deadCoinContract = useDeadCoinContract({ hooks: props.hooks });
@@ -53,6 +54,8 @@ const DeadCoinContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
                     }
                 </div>
             }
+            <FunctionFactory contract={deadCoinContract} fragments={deadCoinContract.interface.functions} />
+
         </div>
     )
 }

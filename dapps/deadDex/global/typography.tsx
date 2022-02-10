@@ -27,10 +27,17 @@ export const Header3 = styled.h3`
 
 export const Header5 = styled.h5`
     font-family: ${FONTS.mainBold};
-    font-size: 1.2rem;
+    font-size: 0.8rem;
 `;
 
 export const Paragraph = styled.p`
     font-family: ${FONTS.main};
-    font-size: 1rem; 
+    font-size: 0.7rem; 
+`
+
+export const StyledLabel = styled.label`
+    font-family: ${FONTS.main};
+    font-size: 0;
+    width: 0px;
+    height: 0px;
 `
