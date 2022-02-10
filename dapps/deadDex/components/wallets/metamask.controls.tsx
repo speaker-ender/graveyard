@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react'
 import { getAddChainParameters } from '../../../../chains'
 import { MetaMaskSelect } from './parts/chainSelect'
 import { address } from '../../../../deployments/localhost/DeadCoin.json'
+import { StyledButton } from "../../global/button.styles"
 
 export const MetaMaskControls = ({
     connector,
@@ -71,11 +72,11 @@ export const MetaMaskControls = ({
             <>
                 <MetaMaskSelect chainId={desiredChainId} setChainId={setChainId} />
                 <br />
-                <button
+                <StyledButton
                     onClick={() => connector.activate(desiredChainId === -1 ? undefined : getAddChainParameters(desiredChainId))}
                 >
                     Try Again?
-                </button>
+                </StyledButton>
             </>
         )
     } else if (active) {
@@ -86,7 +87,7 @@ export const MetaMaskControls = ({
                     <MetaMaskSelect chainId={desiredChainId === -1 ? -1 : currentChainId} setChainId={setChainId} />
                 }
                 <br />
-                <button onClick={() => addToken()} disabled={addTokenSuccess}>Add DeadCoin To Wallet</button>
+                <StyledButton onClick={() => addToken()} disabled={addTokenSuccess}>Add DeadCoin To Wallet</StyledButton>
             </>
         )
     } else {
@@ -94,7 +95,7 @@ export const MetaMaskControls = ({
             <>
                 <MetaMaskSelect chainId={desiredChainId} setChainId={isActivating ? undefined : setChainId} />
                 <br />
-                <button
+                <StyledButton
                     onClick={
                         isActivating
                             ? undefined
@@ -103,7 +104,7 @@ export const MetaMaskControls = ({
                     disabled={isActivating}
                 >
                     {isActivating ? 'Connecting...' : 'Connect'}
-                </button>
+                </StyledButton>
             </>
         )
     }

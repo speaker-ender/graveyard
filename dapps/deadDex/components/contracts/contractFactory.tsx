@@ -19,7 +19,7 @@ const ContractFactory: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
             {Object.entries(contracts).map(([key, value]) => {
 
                 return (
-                    <ContractComponent hooks={props.hooks} contract={value} contractName={key} />
+                    <ContractComponent hooks={props.hooks} contract={value} contractName={key} key={key} />
                 )
             })}
         </div>

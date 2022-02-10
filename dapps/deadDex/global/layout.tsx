@@ -21,7 +21,9 @@ const Layout: React.FC = ({ children }) => {
                 {`
                     body {
                         margin: 0;
-                    }`}
+                        background: black;
+                    }`
+                }
             </style>
             <Head>
                 <title>Dead D3X</title>

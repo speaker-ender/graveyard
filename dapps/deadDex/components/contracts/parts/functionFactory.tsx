@@ -1,11 +1,8 @@
 import * as React from "react"
-import { FC, useCallback } from "react";
-import { Header5, Paragraph } from "../../../global/typography";
+import { FC } from "react";
 import { FunctionFragment } from "ethers/lib/utils";
-import { InputFactory } from "./inputFactory";
-import { StyledButton } from "../../../global/button.styles";
-import { StyledFunction } from "./functionFactory.styles";
 import { Contract } from "@ethersproject/contracts";
+import { FunctionComponent } from "./functionComponent";
 
 interface IContractDetails {
     fragments: {
@@ -16,27 +13,11 @@ interface IContractDetails {
 
 export const FunctionFactory: FC<IContractDetails> = (props) => {
 
-    const trySubmit = useCallback(async (event: React.FormEvent, functionName: string) => {
-        event.preventDefault();
-        // const 
-
-        // const receipt = await props.contract[functionName]({ value: ethers.utils.parseEther(amount) });
-        // console.log(receipt);
-
-    }, [props.contract]);
-
     return (
         <>
             {Object.entries(props.fragments).map(([key, value]) => {
                 return (
-                    <StyledFunction>
-                        <form onSubmit={(e) => trySubmit(e, key)}>
-                            <Header5>{key}</Header5>
-                            <Paragraph>{value.payable}</Paragraph>
-                            <InputFactory inputs={value.inputs} />
-                            <StyledButton type='submit'>Submit</StyledButton>
-                        </form>
-                    </StyledFunction>
+                    <FunctionComponent contract={props.contract} fragment={value} name={key} key={key} />
                 )
             })}
         </>

@@ -8,5 +8,6 @@ export const StyledMetaMaskWallet = styled.div`
     margin-bottom: 85px;
     padding: 15px;
     border-radius: 25px;
-    box-shadow: 5px 5px 1px red, -5px -5px 1px blue;
+    box-shadow: 10px 10px 1px red, -10px -10px 1px blue;
+    transition: background-color 250ms ease;
 `;
