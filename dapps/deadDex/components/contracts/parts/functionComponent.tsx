@@ -20,15 +20,17 @@ interface IFunctionState {
 
 export const FunctionComponent: FC<IContractDetails> = (props) => {
     const [functionState, setFunctionState] = useState<IFunctionState>(null!);
+    const [resultState, setResultState] = useState<IFunctionState>(null!);
+
 
     const trySubmit = useCallback(async (event: React.FormEvent, functionName: string) => {
         event.preventDefault();
-        const passedProps = Object.entries(functionState).map(([key, input]) => input);
+        const passedProps = functionState ? Object.entries(functionState).map(([key, input]) => input) : [];
         console.log(passedProps)
         console.log(functionName);
         // Contract.
         const receipt = await props.contract[functionName](...passedProps);
-
+        setResultState(receipt);
         // const receipt = await props.contract[functionName]({ value: ethers.utils.parseEther(amount) });
         console.log(receipt);
 
@@ -50,6 +52,7 @@ export const FunctionComponent: FC<IContractDetails> = (props) => {
                 <Paragraph>{props.fragment.gas}</Paragraph>
                 <InputFactory inputs={props.fragment.inputs} payable={props.fragment.payable} handleInputChange={handleInputChange} />
                 <StyledButton type='submit'>Submit</StyledButton>
+                <div>{resultState && resultState.toString()}</div>
             </form>
         </StyledFunction>
     )
