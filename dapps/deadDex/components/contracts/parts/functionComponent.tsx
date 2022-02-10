@@ -52,7 +52,7 @@ export const FunctionComponent: FC<IContractDetails> = (props) => {
                 <Paragraph>{props.fragment.gas}</Paragraph>
                 <InputFactory inputs={props.fragment.inputs} payable={props.fragment.payable} handleInputChange={handleInputChange} />
                 <StyledButton type='submit'>Submit</StyledButton>
-                <div>{resultState && resultState.toString()}</div>
+                <Paragraph>{resultState && resultState.toString()}</Paragraph>
             </form>
         </StyledFunction>
     )

@@ -20,6 +20,7 @@ export const MetaMaskControls = ({
     const active = useIsActive()
     const currentProvider = useProvider();
 
+    // TODO: Lets revisit this
     const [desiredChainId, setDesiredChainId] = useState<number>(-1)
     const [addTokenSuccess, setAddTokenSuccess] = useState<boolean | undefined>()
 

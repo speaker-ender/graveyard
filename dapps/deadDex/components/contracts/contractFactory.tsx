@@ -1,25 +1,35 @@
 import * as React from "react"
-import { useDeadCoinContract } from "../../hooks/contracts/deadCoin.hooks";
 import { Web3ReactHooks } from "@web3-react/core";
-import { useCallback, useEffect, useState } from "react";
-import { BigNumber } from "ethers";
-import { ContractDetails } from "./parts/details";
-import { FunctionFactory } from "./parts/functionFactory";
 import { useContracts } from "../../hooks/contracts/contracts.hooks";
-import ContractComponent, { IContract } from "./contractComponent";
-import { Contract } from "@ethersproject/contracts";
+import ContractComponent from "./contractComponent";
+import { StyledContract } from "./contractComponent.styles";
 
 
-const ContractFactory: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
+interface IContractFactory {
+    hooks: Web3ReactHooks;
+    accountColor: string;
+}
+
+const ContractFactory: React.FC<IContractFactory> = (props) => {
     const contracts = useContracts({ hooks: props.hooks });
 
     return (
 
         <div>
-            {Object.entries(contracts).map(([key, value]) => {
+            <select value={1}>
+                <option value={-1}>Default Contract</option>
+                {!!contracts && Object.entries(contracts).map(([key, value], index) => (
+                    <option value={key} key={index}>
+                        {key}
+                    </option>
+                ))}
+            </select>
+            {!!contracts && Object.entries(contracts).map(([key, value], index) => {
 
                 return (
-                    <ContractComponent hooks={props.hooks} contract={value} contractName={key} key={key} />
+                    <StyledContract style={{ 'backgroundColor': props.accountColor }} key={index}>
+                        <ContractComponent hooks={props.hooks} contract={value} contractName={key} />
+                    </StyledContract>
                 )
             })}
         </div>

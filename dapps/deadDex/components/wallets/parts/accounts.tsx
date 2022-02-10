@@ -3,6 +3,8 @@ import { Web3ReactHooks } from "@web3-react/core"
 import { BigNumber } from "ethers"
 import { formatEther } from "ethers/lib/utils"
 import { useEffect, useState } from "react"
+import { Paragraph } from "../../../global/typography"
+import { StyledAccounts } from "./accounts.styles"
 
 const useBalances = (
     provider?: ReturnType<Web3ReactHooks['useProvider']>,
@@ -38,7 +40,7 @@ export const Accounts = ({ hooks: { useAccounts, useProvider, useENSNames } }: {
     const balances = useBalances(provider, accounts)
 
     return (
-        <div>
+        <StyledAccounts>
             Accounts:
             {accounts === undefined
                 ? ' -'
@@ -50,6 +52,6 @@ export const Accounts = ({ hooks: { useAccounts, useProvider, useENSNames } }: {
                             {balances?.[i] ? ` (Ξ${formatEther(balances[i])})` : null}
                         </ul>
                     ))}
-        </div>
+        </StyledAccounts>
     )
 }

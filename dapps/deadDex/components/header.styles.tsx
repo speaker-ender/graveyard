@@ -1,7 +1,7 @@
 // import { gradient } from "global/animation.styles";
 // import { LAYERS } from "global/layers.styles";
 // import { COLORS } from "global/styles";
-import { Header3 } from "../global/typography";
+import { Header2 } from "../global/typography";
 import styled from "styled-components";
 
 interface IStyledHeader {
@@ -16,7 +16,7 @@ export const StyledHeader = styled.div<IStyledHeader>`
     z-index: 100;
 `;
 
-export const StyledHeaderTitle = styled(Header3)`
+export const StyledHeaderTitle = styled(Header2)`
     display: inline;
     margin: 0.5rem;
     mix-blend-mode: difference;

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const FONTS = {
     main: `"Arial Black", Arial, Helvetica, sans-serif`,
@@ -8,21 +8,26 @@ export const FONTS = {
 
 export const Header1 = styled.h1`
     font-family: ${FONTS.mainBold};
-    font-size: 6rem;
+    font-size: 4rem;
     text-transform: uppercase;
     letter-spacing: 0.1rem;
 `;
 
 export const Header2 = styled.h2`
     font-family: ${FONTS.main};
-    font-size: 4rem;
+    font-size: 3rem;
     text-transform: uppercase;
 `;
 
 export const Header3 = styled.h3`
     font-family: ${FONTS.mainBold};
-    font-size: 3rem;
+    font-size: 2rem;
     text-transform: uppercase;
+`;
+
+export const Header4 = styled.h4`
+    font-family: ${FONTS.mainBold};
+    font-size: 1.5rem;
 `;
 
 export const Header5 = styled.h5`
@@ -30,9 +35,13 @@ export const Header5 = styled.h5`
     font-size: 0.8rem;
 `;
 
-export const Paragraph = styled.p`
+export const ParagraphTextStyle = css`
     font-family: ${FONTS.main};
     font-size: 0.7rem; 
+`
+
+export const Paragraph = styled.p`
+    ${ParagraphTextStyle}
 `
 
 export const StyledLabel = styled.label`

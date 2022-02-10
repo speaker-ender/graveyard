@@ -44,15 +44,18 @@ const MetaMaskWallet = () => {
     }, [account, setAccountColor])
 
     return (
-        <StyledMetaMaskWallet style={{ 'backgroundColor': accountColor, 'color': textColor }}>
-            <Status connector={metaMask} hooks={hooks} />
-            <CurrentChain hooks={hooks} />
-            <Accounts hooks={hooks} />
-            <MetaMaskControls connector={metaMask} hooks={hooks} />
+        <>
+            <StyledMetaMaskWallet style={{ 'backgroundColor': accountColor, 'color': textColor }}>
+                <Status connector={metaMask} hooks={hooks} />
+                <CurrentChain hooks={hooks} />
+                <Accounts hooks={hooks} />
+                <MetaMaskControls connector={metaMask} hooks={hooks} />
+            </StyledMetaMaskWallet>
+
             {/* <DeadCoinContract hooks={hooks} />
             <MediumRareStakeContract hooks={hooks} /> */}
-            <ContractFactory hooks={hooks} />
-        </StyledMetaMaskWallet>
+            <ContractFactory hooks={hooks} accountColor={accountColor} />
+        </>
     )
 }
 

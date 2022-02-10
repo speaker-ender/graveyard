@@ -11,7 +11,7 @@ const DeadCoinContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
     const account = props.hooks.useAccount();
     const [balance, setBalance] = useState<BigNumber>(null!);
     const [symbol, setSymbol] = useState<string>(null!);
-
+    deadCoinContract.interface.functions["balanceOf(address)"].inputs
 
     const getBalance = async (account: string) => {
         const accountBalance = await (!!deadCoinContract ? deadCoinContract.balanceOf(account) : BigNumber.from(0));
