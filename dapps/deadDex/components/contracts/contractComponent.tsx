@@ -14,25 +14,25 @@ export interface IContract {
 }
 
 const ContractComponent: React.FC<IContract> = (props) => {
-    const [balance, setBalance] = useState<BigNumber>(null!);
-    const [symbol, setSymbol] = useState<string>(null!);
+    // const [balance, setBalance] = useState<BigNumber>(null!);
+    // const [symbol, setSymbol] = useState<string>(null!);
+
     const currentProvider = props.hooks.useProvider();
-    const { library } = props.hooks.useWeb3React(currentProvider);
-    const contract = useContract(props.contract.address, props.contract.abi, library)
+    const { library, account } = props.hooks.useWeb3React(currentProvider);
+    const contract = useContract(props.contract.address, props.contract.abi, library, account);
 
     return (
-        <div>
+        <>
             {!!contract &&
                 <>
                     <ContractDetails {...props.contract} contractName={props.contractName} showLockedEthValue={true} />
                     <FunctionFactory fragments={contract.interface.functions} contract={contract} />
-                    {!!balance &&
+                    {/* {!!balance &&
                         <p>{`Balance: ${balance.toBigInt().toLocaleString()} ${symbol}`}</p>
-                    }
+                    } */}
                 </>
             }
-
-        </div>
+        </>
     )
 }
 

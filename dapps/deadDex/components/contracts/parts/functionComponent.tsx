@@ -7,6 +7,8 @@ import { StyledButton } from "../../../global/button.styles";
 import { StyledFunction } from "./functionFactory.styles";
 import { Contract } from "@ethersproject/contracts";
 import { removeParenthesisWithText } from "../../../helpers/text.helpers";
+import { PAYABLE_NAME } from "./inputs/ethInput";
+import { ethers } from "ethers";
 
 interface IContractDetails {
     contract: Contract;
@@ -20,21 +22,34 @@ interface IFunctionState {
 
 export const FunctionComponent: FC<IContractDetails> = (props) => {
     const [functionState, setFunctionState] = useState<IFunctionState>(null!);
+    const [payableState, setPayableState] = useState<string>(null!);
     const [resultState, setResultState] = useState<IFunctionState>(null!);
 
 
     const trySubmit = useCallback(async (event: React.FormEvent, functionName: string) => {
         event.preventDefault();
         const passedProps = functionState ? Object.entries(functionState).map(([key, input]) => input) : [];
-        console.log(passedProps);
-        console.log(functionName);
-        console.log(props.contract.interface);
 
-        const receipt = await props.contract[functionName](...passedProps);
-        setResultState(receipt);
-        // const receipt = await props.contract[functionName]({ value: ethers.utils.parseEther(amount) });
-        console.log(receipt);
+        const contractFunction = props.contract[functionName];
 
+        if (!!passedProps) {
+            const receipt = await (!!payableState ? contractFunction(...passedProps, { value: ethers.utils.parseEther(payableState) }) : contractFunction(...passedProps));
+
+            setResultState(receipt);
+
+            console.log(receipt);
+        } else {
+            const receipt = await contractFunction(!!payableState && { value: ethers.utils.parseEther(payableState) });
+
+            setResultState(receipt);
+
+            console.log(receipt);
+        }
+        // const receipt = await contractFunction(...passedProps, !!payableState && { value: ethers.utils.parseEther(payableState) });
+
+        // setResultState(receipt);
+
+        // console.log(receipt);
     }, [props.contract, functionState]);
 
     const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +58,7 @@ export const FunctionComponent: FC<IContractDetails> = (props) => {
         const name = target.name;
         console.log(functionState)
 
-        setFunctionState({ ...functionState, [name]: value })
+        target.name === PAYABLE_NAME ? setPayableState(value as string) : setFunctionState({ ...functionState, [name]: value });
     }, [functionState, setFunctionState])
 
     return (
