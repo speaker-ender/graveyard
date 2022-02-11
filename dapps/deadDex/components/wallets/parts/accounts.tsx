@@ -3,7 +3,6 @@ import { Web3ReactHooks } from "@web3-react/core"
 import { BigNumber } from "ethers"
 import { formatEther } from "ethers/lib/utils"
 import { useEffect, useState } from "react"
-import { Paragraph } from "../../../global/typography"
 import { StyledAccounts } from "./accounts.styles"
 
 const useBalances = (

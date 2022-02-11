@@ -70,6 +70,9 @@ const WalletControls: FC<IWalletControls> = ({ hooks, connector }) => {
                         displayDefault={displayDefault}
                         chainIds={chainIds} />
                 }
+                <StyledButton onClick={() => {
+                    !!connector.deactivate ? connector.deactivate() : undefined
+                }}>Disconnect</StyledButton>
             </>
         )
     } else {
