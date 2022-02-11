@@ -1,24 +1,30 @@
 import * as React from "react"
+import { FC } from "react";
 import { CHAINS, URLS } from "../../../../../chains";
 import { StyledSelect } from "../../../global/input.styles";
 import { StyledLabel } from "../../../global/typography";
 
-export const MetaMaskSelect = ({ chainId, setChainId }: { chainId: number; setChainId?: (chainId: number) => void }) => {
+interface IChainSelect {
+    chainId: number
+    switchChain: ((chainId: number) => Promise<void>) | undefined
+    displayDefault: boolean
+    chainIds: number[]
+}
+
+export const ChainSelect: FC<IChainSelect> = (props) => {
     return (
         <StyledLabel>
-            Chain:{chainId + ' '}
+            Chain:{props.chainId + ' '}
             <StyledSelect
-                value={`${chainId}`}
+                value={`${props.chainId}`}
                 onChange={
-                    setChainId
-                        ? (event) => {
-                            setChainId(Number(event.target.value))
-                        }
-                        : undefined
+                    (event) => {
+                        props.switchChain ? props.switchChain(Number(event.target.value)) : undefined;
+                    }
                 }
-                disabled={!setChainId}
+                disabled={!props.switchChain}
             >
-                <option value={-1}>Default Chain</option>
+                {props.displayDefault ? <option value={-1}>Default Chain</option> : null}
                 {Object.keys(URLS).map((chainId) => (
                     <option key={chainId} value={chainId}>
                         {CHAINS[Number(chainId)].name}

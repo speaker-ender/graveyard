@@ -11,9 +11,8 @@ import MediumRareStakeContract from "../contracts/mediumRareStake";
 import ContractFactory from "../contracts/contractFactory";
 import WalletControls from "./wallet.controls";
 
-const MetaMaskWallet = () => {
+const Wallet = () => {
     const account = hooks.useAccount();
-    const isActive = hooks.useIsActive();
     const [accountColor, setAccountColor] = useState<string>(null!);
     const [textColor, setTextColor] = useState<string>(null!);
 
@@ -55,11 +54,9 @@ const MetaMaskWallet = () => {
 
             {/* <DeadCoinContract hooks={hooks} />
             <MediumRareStakeContract hooks={hooks} /> */}
-            {isActive &&
-                <ContractFactory hooks={hooks} accountColor={accountColor} />
-            }
+            <ContractFactory hooks={hooks} accountColor={accountColor} />
         </>
     )
 }
 
-export default MetaMaskWallet
+export default Wallet

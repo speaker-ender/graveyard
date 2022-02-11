@@ -35,22 +35,19 @@ export const FunctionComponent: FC<IContractDetails> = (props) => {
         if (!!passedProps) {
             const receipt = await (!!payableState ? contractFunction(...passedProps, { value: ethers.utils.parseEther(payableState) }) : contractFunction(...passedProps));
 
-            setResultState(receipt);
-
-            console.log(receipt);
+            handleFunctionResult(receipt);
         } else {
             const receipt = await contractFunction(!!payableState && { value: ethers.utils.parseEther(payableState) });
 
-            setResultState(receipt);
-
-            console.log(receipt);
+            handleFunctionResult(receipt);
         }
-        // const receipt = await contractFunction(...passedProps, !!payableState && { value: ethers.utils.parseEther(payableState) });
-
-        // setResultState(receipt);
-
-        // console.log(receipt);
     }, [props.contract, functionState]);
+
+    const handleFunctionResult = useCallback((result: IFunctionState) => {
+        setResultState(result);
+
+        console.log(result);
+    }, [resultState, setResultState]);
 
     const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         const target = event.target;
@@ -59,7 +56,7 @@ export const FunctionComponent: FC<IContractDetails> = (props) => {
         console.log(functionState)
 
         target.name === PAYABLE_NAME ? setPayableState(value as string) : setFunctionState({ ...functionState, [name]: value });
-    }, [functionState, setFunctionState])
+    }, [functionState, setFunctionState]);
 
     return (
         <StyledFunction>

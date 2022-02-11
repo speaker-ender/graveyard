@@ -1,5 +1,5 @@
 import * as React from "react"
-import { hooks, metaMask } from '../../connectors/metamask.connector';
+import { hooks, walletConnect } from '../../connectors/walletConnect.connector';
 import { Status } from "./parts/status";
 import { CurrentChain } from "./parts/currentChain";
 import { Accounts } from "./parts/accounts";
@@ -11,12 +11,11 @@ import MediumRareStakeContract from "../contracts/mediumRareStake";
 import ContractFactory from "../contracts/contractFactory";
 import WalletControls from "./wallet.controls";
 
-const MetaMaskWallet = () => {
+export default function WalletConnectWallet() {
     const account = hooks.useAccount();
     const isActive = hooks.useIsActive();
     const [accountColor, setAccountColor] = useState<string>(null!);
     const [textColor, setTextColor] = useState<string>(null!);
-
 
     const getAccountColor = (account: string) => {
         const color = account.substring(2).substring(0, 6);
@@ -44,22 +43,23 @@ const MetaMaskWallet = () => {
         }
     }, [account, setAccountColor])
 
+
     return (
         <>
             <StyledMetaMaskWallet style={{ 'backgroundColor': accountColor, 'color': textColor }}>
-                <Status connector={metaMask} hooks={hooks} />
+
+                <b>WalletConnect</b>
+
+                <Status connector={walletConnect} hooks={hooks} />
                 <CurrentChain hooks={hooks} />
                 <Accounts hooks={hooks} />
-                <WalletControls connector={metaMask} hooks={hooks} />
+                <WalletControls connector={walletConnect} hooks={hooks} />
             </StyledMetaMaskWallet>
 
-            {/* <DeadCoinContract hooks={hooks} />
-            <MediumRareStakeContract hooks={hooks} /> */}
             {isActive &&
                 <ContractFactory hooks={hooks} accountColor={accountColor} />
             }
+
         </>
     )
 }
-
-export default MetaMaskWallet
