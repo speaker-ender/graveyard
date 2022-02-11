@@ -1,19 +1,19 @@
-import * as React from "react"
-import { hooks, walletConnect } from '../../connectors/walletConnect.connector';
+import { hooks, walletLink } from '../../connectors/walletLink.connector'
 import { Status } from "./parts/status";
 import { CurrentChain } from "./parts/currentChain";
 import { Accounts } from "./parts/accounts";
-import { useCallback, useEffect, useState } from "react";
-import { lightOrDark } from "../../helpers/theme.helpers";
-import DeadCoinContract from "../contracts/deadCoin";
-import { StyledMetaMaskWallet } from "./metamask.wallet.styles";
-import MediumRareStakeContract from "../contracts/mediumRareStake";
-import ContractFactory from "../contracts/contractFactory";
 import WalletControls from "./wallet.controls";
+import { useCallback, useEffect, useState } from 'react';
+import { lightOrDark } from '../../helpers/theme.helpers';
+import { StyledMetaMaskWallet } from './metamask.wallet.styles';
+import ContractFactory from '../contracts/contractFactory';
 
-export default function WalletConnectWallet() {
-    const account = hooks.useAccount();
-    const isActive = hooks.useIsActive();
+
+// const { useChainId, useAccount, useError, useIsActivating, useIsActive, useProvider, useENSNames } = hooks
+
+const WalletLinkWallet = () => {
+    const account = hooks.useAccount()
+    const isActive = hooks.useIsActive()
     const [accountColor, setAccountColor] = useState<string>(null!);
     const [textColor, setTextColor] = useState<string>(null!);
 
@@ -43,17 +43,16 @@ export default function WalletConnectWallet() {
         }
     }, [account, setAccountColor])
 
-
     return (
         <>
             <StyledMetaMaskWallet style={{ 'backgroundColor': accountColor, 'color': textColor }}>
 
-                <b>WalletConnect</b>
+                <b>Wallet Link</b>
 
-                <Status connector={walletConnect} hooks={hooks} />
+                <Status connector={walletLink} hooks={hooks} />
                 <CurrentChain hooks={hooks} />
                 <Accounts hooks={hooks} />
-                <WalletControls connector={walletConnect} hooks={hooks} />
+                <WalletControls connector={walletLink} hooks={hooks} />
             </StyledMetaMaskWallet>
 
             {isActive &&
@@ -62,3 +61,5 @@ export default function WalletConnectWallet() {
         </>
     )
 }
+
+export default WalletLinkWallet;
