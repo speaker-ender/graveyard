@@ -2,9 +2,12 @@ import * as React from "react";
 import Head from 'next/head';
 // import Navigation from "components/navigation";
 import { useState } from "react";
-// import { StyledPageContainer } from "./layout.styles";
 import dynamic from "next/dynamic";
 import Header from "../components/header";
+
+const MetaMaskWallet = dynamic(() => import('../components/wallets/metamask.wallet'), { ssr: false });
+const WalletConnectWallet = dynamic(() => import('../components/wallets/walletConnect.wallet'), { ssr: false });
+const WalletLinkWallet = dynamic(() => import('../components/wallets/walletLink.wallet'), { ssr: false });
 
 const Layout: React.FC = ({ children }) => {
     const [navOpen, setNavOpen] = useState(false);
@@ -32,9 +35,10 @@ const Layout: React.FC = ({ children }) => {
             <main>
                 <Header updateNavOpen={updateNavOpen} />
                 {/* <Navigation open={navOpen} updateNavOpen={updateNavOpen} /> */}
-                {/* <StyledPageContainer entered={!!entered}> */}
+                <MetaMaskWallet />
+                <WalletConnectWallet />
+                <WalletLinkWallet />
                 {children}
-                {/* </StyledPageContainer> */}
             </main>
         </div>
     )
