@@ -3,7 +3,7 @@
 
 ### Welcome to my crypto starter framework. This is a monorepo for developing anything and everything for crypto.  
 ## While this is currently under development, the goals are as follows:
-- Starter Contracts for each token standard
+- Starter Contracts for each chain
 - Extensions to add functionality for starter contracts
 - Using strongly typed languages and extensive testing
 - Support for as many blockchains as possible
@@ -15,9 +15,9 @@ I will update my goals as I continue development
 ## Supported Blockchains
 ### Current
 - Ethereum
-- Matic/Polygon
 
 ### Future
+- [ ] Matic/Polygon
 - [ ] Avalanche
 - [ ] Arbitrum
 - [ ] Harmony
@@ -33,5 +33,3 @@ I will update my goals as I continue development
 #### Chai
 
 ## Setup
-
-## Optional Config
