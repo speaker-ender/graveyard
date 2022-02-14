@@ -1,34 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# DEAD DEX
+## Summary
+This is a DAPP framework for quickly implementing wallets, contracts, and anything else web3 related.
+While working with Scaffold-Eth, I liked how easy it was to implement contracts into a DAPP but thought I could write something better.
+The goal is to create something more performant, easier to use, and more fully featured than Scaffold-Eth
 
-## Getting Started
+## Stack
+I'm using Next.JS as the base because it is very simple to spin up a site that allows for a mix of SSR and client side rendering.
+Styled-Components is being used for styling because of how well it integrates with React.
 
-First, run the development server:
+## Features
+### Auto-Contract Loading
+This is still under development but the goal is to allow for multiple paths for auto-integrating contracts.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+#### Options
+##### For Testing, Rapid Development, or Advanced Controls
+- Auto-Load every contract deployed to the selected chain
+- Auto-Load every function from a contract with the appropriate fields
+- Auto-creating usable forms based the function parameters
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+##### For Production
+- Templates for individually adding contracts, functions, and forms that are strongly typed
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Multi-Wallet Functionality
+The goal for this is to allow a user to connect multiple wallets and then switch between them while using contracts.
+This would be potentially usefull for doing client-side testing, cross-chain transactions, or transactions that require multiple wallets for signing
