@@ -1,25 +1,27 @@
 // import { gradient } from "global/animation.styles";
 // import { LAYERS } from "global/layers.styles";
 // import { COLORS } from "global/styles";
-import { Header2 } from "../global/typography";
+import { Header2, Header2Style } from "../global/typography";
 import styled from "styled-components";
 
-interface IStyledHeader {
+interface IStyledDrawer {
+    open: boolean;
 }
 
-export const StyledHeader = styled.div<IStyledHeader>`
-    /* position: fixed; */
-    top: 0;
-    width: 100vw;
-    background: black;
-    color: white;
-    z-index: 100;
+export const StyledDrawer = styled.div<IStyledDrawer>`
 `;
 
-export const StyledHeaderTitle = styled(Header2)`
-    display: inline;
-    margin: 0.5rem;
-    mix-blend-mode: difference;
+export const StyledDrawerTitle = styled.div`
+    ${Header2Style}
+    cursor: pointer;
+    user-select: none;
+`;
+
+export const StyledDrawerContent = styled.div<IStyledDrawer>`
+    opacity: ${props => props.open ? 1 : 0};
+    height: ${props => props.open ? "100%" : "0px"};
+    pointer-events: ${props => props.open ? "all" : "none"};
+    overflow: hidden
 `;
 
 // export const StyledEnderNav = styled(Header3)`

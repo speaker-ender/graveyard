@@ -20,7 +20,7 @@ const WalletControls: FC<IWalletControls> = ({ hooks, connector }) => {
     const isActivating = hooks.useIsActivating()
     const isActive = hooks.useIsActive()
     const isNetwork = connector instanceof Network
-    const displayDefault = !isNetwork
+    const displayDefault = false
     const chainIds = (isNetwork ? Object.keys(URLS) : Object.keys(CHAINS)).map((chainId) => Number(chainId))
 
     const [desiredChainId, setDesiredChainId] = useState<number>(isNetwork ? 1 : -1)
@@ -65,12 +65,13 @@ const WalletControls: FC<IWalletControls> = ({ hooks, connector }) => {
             <>
                 {/* TODO: Fix chainID to make more sense */}
                 {chainId &&
-                    <ChainSelect chainId={desiredChainId === -1 ? -1 : chainId}
+                    <ChainSelect chainId={chainId}
                         switchChain={switchChain}
                         displayDefault={displayDefault}
                         chainIds={chainIds} />
                 }
                 <StyledButton onClick={() => {
+                    console.log(connector);
                     !!connector.deactivate ? connector.deactivate() : undefined
                 }}>Disconnect</StyledButton>
             </>

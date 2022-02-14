@@ -14,7 +14,7 @@ interface IChainSelect {
 export const ChainSelect: FC<IChainSelect> = (props) => {
     return (
         <StyledLabel>
-            Chain:{props.chainId + ' '}
+            Chain:
             <StyledSelect
                 value={`${props.chainId}`}
                 onChange={

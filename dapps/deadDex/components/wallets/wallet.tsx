@@ -1,17 +1,24 @@
 import * as React from "react"
-import { hooks, metaMask } from '../../connectors/metamask.connector';
 import { Status } from "./parts/status";
 import { CurrentChain } from "./parts/currentChain";
 import { Accounts } from "./parts/accounts";
-import { useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { lightOrDark } from "../../helpers/theme.helpers";
-import DeadCoinContract from "../contracts/deadCoin";
-import { StyledMetaMaskWallet } from "./metamask.wallet.styles";
-import MediumRareStakeContract from "../contracts/mediumRareStake";
-import ContractFactory from "../contracts/contractFactory";
+import { StyledWallet } from "./wallet.styles";
 import WalletControls from "./wallet.controls";
+import { Web3ReactHooks } from "@web3-react/core";
+import { Connector } from "@web3-react/types";
+import { MetaMask } from "@web3-react/metamask";
+import { WalletConnect } from "@web3-react/walletconnect";
+import { WalletLink } from "@web3-react/walletlink";
+import { Network } from '@web3-react/network'
 
-const Wallet = () => {
+interface IWallet {
+    hooks: Web3ReactHooks;
+    connector: MetaMask | WalletConnect | WalletLink | Network;
+}
+
+const Wallet: FC<IWallet> = ({ hooks, connector }) => {
     const account = hooks.useAccount();
     const [accountColor, setAccountColor] = useState<string>(null!);
     const [textColor, setTextColor] = useState<string>(null!);
@@ -44,18 +51,12 @@ const Wallet = () => {
     }, [account, setAccountColor])
 
     return (
-        <>
-            <StyledMetaMaskWallet style={{ 'backgroundColor': accountColor, 'color': textColor }}>
-                <Status connector={metaMask} hooks={hooks} />
-                <CurrentChain hooks={hooks} />
-                <Accounts hooks={hooks} />
-                <WalletControls connector={metaMask} hooks={hooks} />
-            </StyledMetaMaskWallet>
-
-            {/* <DeadCoinContract hooks={hooks} />
-            <MediumRareStakeContract hooks={hooks} /> */}
-            <ContractFactory hooks={hooks} accountColor={accountColor} />
-        </>
+        <StyledWallet style={{ 'backgroundColor': accountColor, 'color': textColor }}>
+            <Status connector={connector as Connector} hooks={hooks} />
+            <CurrentChain hooks={hooks} />
+            <Accounts hooks={hooks} />
+            <WalletControls connector={connector} hooks={hooks} />
+        </StyledWallet>
     )
 }
 

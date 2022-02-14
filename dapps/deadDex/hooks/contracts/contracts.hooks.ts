@@ -1,7 +1,7 @@
-import { Web3ReactHooks } from "@web3-react/core";
 import { Deployment } from 'hardhat-deploy/types';
 import * as Contracts from '../../../../deployments/deployments.json';
 import { CHAINS } from "../../../../chains";
+import { Web3ReactActiveHooks } from "hooks/connector.hooks";
 
 interface IDeployedContracts {
     [chainId: number]: {
@@ -33,8 +33,8 @@ export const loadContracts = (chainId?: number) => {
     }
 }
 
-export const useContracts = ({ hooks: { useChainId } }: { hooks: Web3ReactHooks }) => {
-    const chainId = useChainId();
+export const useContracts = ({ hooks: { useActiveChainId } }: { hooks: Web3ReactActiveHooks }) => {
+    const chainId = useActiveChainId();
     let contracts: IDeployments = {};
 
     const loadedContracts = loadContracts(chainId)

@@ -1,7 +1,7 @@
 import { Header3 } from "../../global/typography";
 import styled from "styled-components";
 
-export const StyledMetaMaskWallet = styled.div`
+export const StyledWallet = styled.div`
     width: 85vw;
     margin: auto;
     margin-top: 85px;
