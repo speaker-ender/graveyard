@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import * as React from "react";
 import { StyledHeader, StyledHeaderTitle } from "./header.styles";
 
+const ChainSelect = dynamic(() => import('./wallets/parts/chainSelect'), { ssr: false });
 const WalletSelector = dynamic(() => import('./wallets/walletSelector'), { ssr: false });
 
 interface IHeader {
@@ -19,6 +20,7 @@ const Header: React.FC<IHeader> = (props) => {
             <StyledHeaderTitle>
                 Dead D3X
             </StyledHeaderTitle>
+            <ChainSelect />
             <WalletSelector />
         </StyledHeader>
     )

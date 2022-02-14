@@ -21,7 +21,7 @@ const Drawer: React.FC<IDrawer> = (props) => {
 
     return (
         <StyledDrawer open={!!open}>
-            <StyledDrawerTitle onClick={() => visibilityToggle()}>{props.title}</StyledDrawerTitle>
+            <StyledDrawerTitle open={!!open} onClick={() => visibilityToggle()}>{props.title}</StyledDrawerTitle>
 
             <StyledDrawerContent open={!!open}>
                 {props.children}

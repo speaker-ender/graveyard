@@ -7,7 +7,7 @@ import { FC } from 'react'
 import { useCallback, useState } from 'react'
 import { CHAINS, getAddChainParameters, URLS } from '../../../../chains'
 import { StyledButton } from '../../global/button.styles'
-import { ChainSelect } from './parts/chainSelect'
+import ChainSelect from './parts/chainSelect'
 
 interface IWalletControls {
     hooks: Web3ReactHooks,
@@ -21,7 +21,6 @@ const WalletControls: FC<IWalletControls> = ({ hooks, connector }) => {
     const isActive = hooks.useIsActive()
     const isNetwork = connector instanceof Network
     const displayDefault = false
-    const chainIds = (isNetwork ? Object.keys(URLS) : Object.keys(CHAINS)).map((chainId) => Number(chainId))
 
     const [desiredChainId, setDesiredChainId] = useState<number>(isNetwork ? 1 : -1)
 
@@ -47,8 +46,7 @@ const WalletControls: FC<IWalletControls> = ({ hooks, connector }) => {
             <>
                 <ChainSelect chainId={desiredChainId}
                     switchChain={switchChain}
-                    displayDefault={displayDefault}
-                    chainIds={chainIds} />
+                    displayDefault={displayDefault} />
                 <StyledButton
                     onClick={() =>
                         connector instanceof WalletConnect || connector instanceof Network
@@ -67,8 +65,7 @@ const WalletControls: FC<IWalletControls> = ({ hooks, connector }) => {
                 {chainId &&
                     <ChainSelect chainId={chainId}
                         switchChain={switchChain}
-                        displayDefault={displayDefault}
-                        chainIds={chainIds} />
+                        displayDefault={displayDefault} />
                 }
                 <StyledButton onClick={() => {
                     console.log(connector);
@@ -81,8 +78,7 @@ const WalletControls: FC<IWalletControls> = ({ hooks, connector }) => {
             <>
                 <ChainSelect chainId={desiredChainId}
                     switchChain={isActivating ? undefined : switchChain}
-                    displayDefault={displayDefault}
-                    chainIds={chainIds} />
+                    displayDefault={displayDefault} />
                 <StyledButton
                     onClick={
                         isActivating

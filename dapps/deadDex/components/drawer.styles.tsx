@@ -11,10 +11,17 @@ interface IStyledDrawer {
 export const StyledDrawer = styled.div<IStyledDrawer>`
 `;
 
-export const StyledDrawerTitle = styled.div`
+export const StyledDrawerTitle = styled.div<IStyledDrawer>`
     ${Header2Style}
     cursor: pointer;
     user-select: none;
+
+    &::after {
+        content: ${props => props.open ? '"-"' : '"+"'};
+        display: inline-block;
+        /* position: relative; */
+        color: white;
+    }
 `;
 
 export const StyledDrawerContent = styled.div<IStyledDrawer>`

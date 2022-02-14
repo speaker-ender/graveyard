@@ -1,5 +1,5 @@
 import { Networkish, Web3Provider } from "@ethersproject/providers";
-import { Web3ReactHooks, getPriorityConnector, getSelectedConnector } from "@web3-react/core";
+import { getPriorityConnector, getSelectedConnector } from "@web3-react/core";
 import { ConnectorName, Connectors, getConnectorName } from "connectors/connectors";
 import { createContext, useCallback, useContext } from "react";
 import { useState } from "react";
@@ -28,6 +28,8 @@ export const useActiveConnectorHooks = () => {
     } = getSelectedConnector(...Connectors)
 
     const [activeConnectorName, setActiveConnectorName] = useState<ConnectorName>(null!);
+    const [selectedConnectorChainId, setSelectedConnectorChainId] = useState<number>(-1);
+
     const { usePriorityConnector } = getPriorityConnector(...Connectors);
 
     const useActiveConnector = useCallback(() => {
@@ -46,6 +48,10 @@ export const useActiveConnectorHooks = () => {
     const updateActiveConnectorName = useCallback((connectorName: ConnectorName) => {
         setActiveConnectorName(connectorName);
     }, [activeConnectorName, setActiveConnectorName]);
+
+    const updateSelectedChainId = useCallback((chainId: number) => {
+        setSelectedConnectorChainId(chainId);
+    }, [selectedConnectorChainId, setSelectedConnectorChainId]);
 
     const useActiveChainId = () => useSelectedChainId(useActiveConnector());
 
@@ -104,7 +110,9 @@ export const useActiveConnectorHooks = () => {
         useActiveENSName,
         useActiveWeb3React,
         updateActiveConnectorName,
-        activeConnectorName
+        activeConnectorName,
+        updateSelectedChainId,
+        selectedConnectorChainId
     }
 };
 

@@ -10,6 +10,7 @@ import { hooks as walletConnectHooks, walletConnect } from './walletConnect.conn
 import { hooks as walletLinkHooks, walletLink } from './walletLink.connector'
 
 export type ConnectorName = 'MetaMask' | 'WalletConnect' | 'WalletLink' | 'Network' | "Unknown";
+export type ConnectorTypes = MetaMask | WalletConnect | WalletLink | Network;
 
 export const getConnectorName = (connector: Connector): ConnectorName => {
     if (connector instanceof MetaMask) return 'MetaMask'
@@ -21,7 +22,7 @@ export const getConnectorName = (connector: Connector): ConnectorName => {
 }
 
 
-export const Connectors: [Connector, Web3ReactHooks][] = [
+export const Connectors: [MetaMask | WalletConnect | WalletLink | Network, Web3ReactHooks][] = [
     [metaMask, metaMaskHooks],
     [walletConnect, walletConnectHooks],
     [walletLink, walletLinkHooks]
