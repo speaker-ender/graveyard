@@ -16,6 +16,7 @@ const Navigation: React.FC<INavigation> = (props) => {
     return (
         <StyledNavigation open={!!props.open} onClick={() => props.updateNavOpen()}>
             <StyledNavigationLink><Link href={'/'}>Home</Link></StyledNavigationLink>
+            <StyledNavigationLink><Link href={'/swapper'}>Swapper</Link></StyledNavigationLink>
             <StyledNavigationLink><Link href={'/debug'}>Debug</Link></StyledNavigationLink>
         </StyledNavigation>
     )

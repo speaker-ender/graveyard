@@ -1,6 +1,5 @@
 // import { LAYERS } from "global/layers.styles";
 // import { COLORS } from "global/styles";
-// import { Header3 } from "global/typeography.styles";
 import { Header3Style } from "global/typography";
 import styled from "styled-components";
 
@@ -11,6 +10,7 @@ interface IStyledNavigation {
 export const StyledNavigation = styled.div<IStyledNavigation>`
     top: 0;
     left: 0;
+    margin-top: 100px;
     opacity: ${props => props.open ? '1' : '0'};
     pointer-events: ${props => props.open ? '' : 'none'};
 `;

@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import Header from "../components/header";
 import { FC } from "react";
 import Navigation from "components/navigation";
+import { StyledPage } from "pages/page.styles";
 
 const ActiveConnectorContextProvider = dynamic<{}>(() => import('hooks/connector.hooks').then((mod) => mod.ActiveConnectorContextProvider), { ssr: false });
 
@@ -36,7 +37,9 @@ const Layout: React.FC = ({ children }) => {
                 <main>
                     <Header updateNavOpen={updateNavOpen} />
                     <Navigation open={true} updateNavOpen={updateNavOpen} />
-                    {children}
+                    <StyledPage>
+                        {children}
+                    </StyledPage>
                 </main>
             </div>
         </ActiveConnectorContextProvider>
