@@ -15,10 +15,8 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
         log: true,
     });
 };
+
 export default func;
+
 func.dependencies = ['DeadCoin'];
 func.tags = ['DEX'];
-
-const delay = (ms: number) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-};

@@ -9,7 +9,13 @@ contract DEX is Ownable {
     uint256 public constant TOKENS_PER_ETH = 100;
     uint256 public constant FEE_DENOM = 1000;
 
+    event Funded(address funder, uint256 amountOfEth);
     event BuyTokens(address buyer, uint256 amountOfEth, uint256 amountOfTokens);
+    event SellTokens(
+        address seller,
+        uint256 amountOfEth,
+        uint256 amountOfTokens
+    );
 
     error InsufficientLiquidity();
     error OverSelling();
@@ -49,5 +55,10 @@ contract DEX is Ownable {
 
         deadCoin.transferFrom(msg.sender, address(this), theAmount);
         payable(msg.sender).transfer(payout);
+        emit SellTokens(msg.sender, payout, theAmount);
+    }
+
+    receive() external payable {
+        emit Funded(msg.sender, msg.value);
     }
 }
