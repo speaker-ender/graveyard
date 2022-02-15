@@ -4,10 +4,6 @@ import { BigNumber } from "ethers";
 import "chai-bn";
 import { ethers, deployments } from "hardhat";
 import 'hardhat-deploy';
-import {
-    constants,
-    expectRevert,
-} from "@openzeppelin/test-helpers";
 import { DeadCoin, DEX } from 'typechain-types';
 import * as dotenv from "dotenv";
 import { getAccounts, getTestValues } from './helpers/Setup';
@@ -47,40 +43,45 @@ describe("DEX", function () {
             await deadCoin.transfer(DEX.address, parseEther('50'));
         });
 
-        it('correct DEX eth balance on buy', async function () {
-            const startEthBalance = await ethers.provider.getBalance(DEX.address);
-            await DEX.connect(receiverAccount).buyTokens({ value: knownValue });
-            const endEthBalance = await ethers.provider.getBalance(DEX.address);
+        describe("DEX Balances", function () {
+            it('correct eth balance on buy', async function () {
+                const startEthBalance = await ethers.provider.getBalance(DEX.address);
+                await DEX.connect(receiverAccount).buyTokens({ value: knownValue });
+                const endEthBalance = await ethers.provider.getBalance(DEX.address);
 
-            expect(endEthBalance).to.equal((startEthBalance).add(knownValue));
+                expect(endEthBalance).to.equal((startEthBalance).add(knownValue));
+            });
+
+            it('correct coin balance on buy', async function () {
+                const startCoinBalance = await deadCoin.balanceOf(DEX.address);
+                await DEX.connect(receiverAccount).buyTokens({ value: knownValue });
+                const endCoinBalance = await deadCoin.balanceOf(DEX.address);
+
+                expect(endCoinBalance).to.equal((startCoinBalance).sub(knownValue.mul(await DEX.TOKENS_PER_ETH())));
+            });
         });
 
-        it('correct Buyer eth balance on buy', async function () {
-            const startEthBalance = await ethers.provider.getBalance(receiverAddress);
-            const receipt = await (await DEX.connect(receiverAccount).buyTokens({ value: knownValue })).wait();
-            const endEthBalance = await ethers.provider.getBalance(receiverAddress);
+        describe("Buyer Balances", function () {
+            it('correct eth balance on buy', async function () {
+                const startEthBalance = await ethers.provider.getBalance(receiverAddress);
+                const receipt = await (await DEX.connect(receiverAccount).buyTokens({ value: knownValue })).wait();
+                const endEthBalance = await ethers.provider.getBalance(receiverAddress);
 
-            // Annoying way to account for TX fees
-            const totalCost = knownValue.add(receipt.cumulativeGasUsed.mul(receipt.effectiveGasPrice));
+                // Annoying way to account for TX fees
+                const totalCost = knownValue.add(receipt.cumulativeGasUsed.mul(receipt.effectiveGasPrice));
 
-            expect(endEthBalance).to.equal((startEthBalance).sub(totalCost));
+                expect(endEthBalance).to.equal((startEthBalance).sub(totalCost));
+            });
+
+            it('correct coin balance on buy', async function () {
+                const startCoinBalance = await deadCoin.balanceOf(receiverAddress);
+                await DEX.connect(receiverAccount).buyTokens({ value: knownValue });
+                const endCoinBalance = await deadCoin.balanceOf(receiverAddress);
+
+                expect(endCoinBalance).to.equal((startCoinBalance).add(knownValue.mul(await DEX.TOKENS_PER_ETH())));
+            });
         });
 
-        it('correct DEX coin balance on buy', async function () {
-            const startCoinBalance = await deadCoin.balanceOf(DEX.address);
-            await DEX.connect(receiverAccount).buyTokens({ value: knownValue });
-            const endCoinBalance = await deadCoin.balanceOf(DEX.address);
-
-            expect(endCoinBalance).to.equal((startCoinBalance).sub(knownValue.mul(await DEX.TOKENS_PER_ETH())));
-        });
-
-        it('correct Buyer coin balance on buy', async function () {
-            const startCoinBalance = await deadCoin.balanceOf(receiverAddress);
-            await DEX.connect(receiverAccount).buyTokens({ value: knownValue });
-            const endCoinBalance = await deadCoin.balanceOf(receiverAddress);
-
-            expect(endCoinBalance).to.equal((startCoinBalance).add(knownValue.mul(await DEX.TOKENS_PER_ETH())));
-        });
 
         it('correct event emitted on buy', async function () {
             expect(DEX.buyTokens({ value: knownValue })).to.emit(DEX, 'BuyTokens').withArgs(senderAddress, knownValue, knownValue.mul(await DEX.TOKENS_PER_ETH()));
@@ -94,22 +95,51 @@ describe("DEX", function () {
             await senderAccount.sendTransaction({ to: DEX.address, value: parseEther('2') })
         });
 
-        it('correct DEX eth balance on sell', async function () {
-            const startEthBalance = await ethers.provider.getBalance(DEX.address);
-            await deadCoin.connect(receiverAccount).approve(DEX.address, knownValue);
-            await DEX.connect(receiverAccount).sellTokens(knownValue);
-            const endEthBalance = await ethers.provider.getBalance(DEX.address);
 
-            expect(endEthBalance).to.equal((startEthBalance).sub(knownValue.div(await DEX.TOKENS_PER_ETH())));
+        describe("DEX Balances", function () {
+            it('correct DEX eth balance on sell', async function () {
+                const startEthBalance = await ethers.provider.getBalance(DEX.address);
+                await deadCoin.connect(receiverAccount).approve(DEX.address, knownValue);
+                await DEX.connect(receiverAccount).sellTokens(knownValue);
+                const endEthBalance = await ethers.provider.getBalance(DEX.address);
+
+                expect(endEthBalance).to.equal((startEthBalance).sub(knownValue.div(await DEX.TOKENS_PER_ETH())));
+            });
+
+            it('correct DEX coin balance on sell', async function () {
+                const startCoinBalance = await deadCoin.balanceOf(DEX.address);
+                await deadCoin.connect(receiverAccount).approve(DEX.address, knownValue);
+                await DEX.connect(receiverAccount).sellTokens(knownValue);
+                const endCoinBalance = await deadCoin.balanceOf(DEX.address);
+
+                expect(endCoinBalance).to.equal((startCoinBalance).add(knownValue));
+            });
         });
 
-        it('correct DEX coin balance on sell', async function () {
-            const startCoinBalance = await deadCoin.balanceOf(DEX.address);
-            await deadCoin.connect(receiverAccount).approve(DEX.address, knownValue);
-            await DEX.connect(receiverAccount).sellTokens(knownValue);
-            const endCoinBalance = await deadCoin.balanceOf(DEX.address);
+        describe("Seller Balances", function () {
+            it('correct eth balance on sell', async function () {
+                const ethTestValue = parseEther(knownValue.toString());
+                const startEthBalance = await ethers.provider.getBalance(receiverAddress);
+                const approveReceipt = await (await deadCoin.connect(receiverAccount).approve(DEX.address, ethTestValue)).wait();
+                const receipt = await (await DEX.connect(receiverAccount).sellTokens(ethTestValue)).wait();
+                const endEthBalance = await ethers.provider.getBalance(receiverAddress);
 
-            expect(endCoinBalance).to.equal((startCoinBalance).add(knownValue));
+                // Annoying way to account for TX fees
+                const approveFees = approveReceipt.effectiveGasPrice.mul(approveReceipt.cumulativeGasUsed);
+                const gasFees = receipt.effectiveGasPrice.mul(receipt.cumulativeGasUsed).add(approveFees);
+                const ethToReceive = ethTestValue.div(await DEX.TOKENS_PER_ETH());
+
+                expect(endEthBalance).to.equal((startEthBalance).add(ethToReceive).sub(gasFees));
+            });
+
+            it('correct coin balance on sell', async function () {
+                const startCoinBalance = await deadCoin.balanceOf(receiverAddress);
+                await deadCoin.connect(receiverAccount).approve(DEX.address, knownValue);
+                await DEX.connect(receiverAccount).sellTokens(knownValue);
+                const endCoinBalance = await deadCoin.balanceOf(receiverAddress);
+
+                expect(endCoinBalance).to.equal((startCoinBalance).sub(knownValue));
+            });
         });
 
         it('correct event emitted on sell', async function () {
