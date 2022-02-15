@@ -33,8 +33,9 @@ contract DEX is Ownable {
     function buyTokens() public payable {
         uint256 toBuy = msg.value * TOKENS_PER_ETH;
 
-        if (deadCoin.balanceOf(address(this)) < toBuy)
+        if (deadCoin.balanceOf(address(this)) < toBuy) {
             revert InsufficientLiquidity();
+        }
 
         deadCoin.transfer(msg.sender, toBuy);
         emit BuyTokens(msg.sender, msg.value, toBuy);
@@ -43,8 +44,9 @@ contract DEX is Ownable {
     function buyOrder() public payable {
         uint256 toBuy = msg.value * TOKENS_PER_ETH;
 
-        if (deadCoin.balanceOf(address(this)) < toBuy)
+        if (deadCoin.balanceOf(address(this)) < toBuy) {
             revert InsufficientLiquidity();
+        }
 
         uint256 toSend = msg.value * TOKENS_PER_ETH;
         deadCoin.transfer(msg.sender, toSend);

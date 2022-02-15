@@ -7,7 +7,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     const { deploy } = deployments;
     const { deployer } = await getNamedAccounts();
 
-    const deadCoin = await hre.deployments.get('DeadCoin');
+    const deadCoin = await deployments.get('DeadCoin');
 
     await deploy('DEX', {
         from: deployer,
@@ -16,6 +16,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     });
 };
 export default func;
+func.dependencies = ['DeadCoin'];
 func.tags = ['DEX'];
 
 const delay = (ms: number) => {
