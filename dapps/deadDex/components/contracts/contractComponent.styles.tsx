@@ -18,13 +18,6 @@ export const StyledContractHeader = styled.div`
         user-select: none;
 `
 
-interface StyledContractContent {
-    visible: boolean;
-}
+export const StyledContractContent = styled.div`
 
-export const StyledContractContent = styled.div<StyledContractContent>`
-    opacity: ${props => props.visible ? 1 : 0};
-    height: ${props => props.visible ? "100%" : "0px"};
-    pointer-events: ${props => props.visible ? "all" : "none"};
-    overflow: hidden
 `

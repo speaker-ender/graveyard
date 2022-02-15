@@ -10,13 +10,14 @@ interface IWalletSelector {
 }
 
 const WalletSelector: FC<IWalletSelector> = () => {
-    const { updateActiveConnectorName, activeConnectorName, useActiveConnector, selectedConnectorChainId } = useActiveConnectorContext();
+    const { updateActiveConnectorName, activeConnectorName, useActiveConnector, selectedConnectorChainId, useActiveAccount } = useActiveConnectorContext();
     const activeConnector = useActiveConnector();
+    const account = useActiveAccount();
     // const selectedConnectorName = getConnectorName(activeConnector);
 
     return (
         <StyledWalletSelectorWrapper>
-            <Drawer title={activeConnectorName ? `Wallet: ${activeConnectorName}` : 'Connect Wallet'}>
+            <Drawer title={activeConnectorName ? `🧧: ${activeConnectorName} ${account}` : 'Connect Wallet'}>
                 <StyledWalletSelector>
                     {Object.entries(Connectors).map(([key, [connector, hooks]], index) => {
                         const name = getConnectorName(connector);
@@ -26,7 +27,10 @@ const WalletSelector: FC<IWalletSelector> = () => {
                         return (
                             <StyledWalletSelectorOption key={index}>
                                 <StyledWalletSelectorTitle>{name}</StyledWalletSelectorTitle>
-                                {!!isActive && !isActiveConnector &&
+                                {!!isActiveConnector &&
+                                    <div>🟢</div>
+                                }
+                                {(!!isActive && !isActiveConnector) &&
                                     <StyledButton onClick={() => !!updateActiveConnectorName && updateActiveConnectorName(name)}>Set Active</StyledButton>
                                 }
                                 <ConnectButton hooks={hooks} connector={connector} selectedChainId={selectedConnectorChainId} />

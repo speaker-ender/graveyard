@@ -5,12 +5,9 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import Header from "../components/header";
 import { FC } from "react";
+import Navigation from "components/navigation";
 
 const ActiveConnectorContextProvider = dynamic<{}>(() => import('hooks/connector.hooks').then((mod) => mod.ActiveConnectorContextProvider), { ssr: false });
-
-const MetaMaskWallet = dynamic(() => import('../components/wallets/metamask.wallet'), { ssr: false });
-const WalletConnectWallet = dynamic(() => import('../components/wallets/walletConnect.wallet'), { ssr: false });
-const WalletLinkWallet = dynamic(() => import('../components/wallets/walletLink.wallet'), { ssr: false });
 
 const Layout: React.FC = ({ children }) => {
     const [navOpen, setNavOpen] = useState(false);
@@ -38,10 +35,7 @@ const Layout: React.FC = ({ children }) => {
                 </Head>
                 <main>
                     <Header updateNavOpen={updateNavOpen} />
-                    {/* <Navigation open={navOpen} updateNavOpen={updateNavOpen} /> */}
-                    <MetaMaskWallet />
-                    <WalletConnectWallet />
-                    <WalletLinkWallet />
+                    <Navigation open={true} updateNavOpen={updateNavOpen} />
                     {children}
                 </main>
             </div>

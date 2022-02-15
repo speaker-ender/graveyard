@@ -12,6 +12,7 @@ import { MetaMask } from "@web3-react/metamask";
 import { WalletConnect } from "@web3-react/walletconnect";
 import { WalletLink } from "@web3-react/walletlink";
 import { Network } from '@web3-react/network'
+import { useGeneratedColorTheme } from "hooks/theme.hooks";
 
 interface IWallet {
     hooks: Web3ReactHooks;
@@ -20,38 +21,16 @@ interface IWallet {
 
 const Wallet: FC<IWallet> = ({ hooks, connector }) => {
     const account = hooks.useAccount();
-    const [accountColor, setAccountColor] = useState<string>(null!);
-    const [textColor, setTextColor] = useState<string>(null!);
-
-
-    const getAccountColor = (account: string) => {
-        const color = account.substring(2).substring(0, 6);
-        return `#${color}`;
-    }
-
-    const updateAccountColor = useCallback(async (account: string) => {
-        setAccountColor(getAccountColor(account));
-    }, [accountColor, setAccountColor]);
-
-    const updateTextColor = useCallback(() => {
-        const theme = lightOrDark(accountColor);
-        setTextColor(theme == 'dark' ? 'white' : 'black');
-    }, [accountColor, setTextColor]);
+    const { backgroundColor, textColor, updateBackgroundColor } = useGeneratedColorTheme();
 
     useEffect(() => {
-        !!accountColor && updateTextColor();
+        !!account && updateBackgroundColor(account);
         return () => {
         }
-    }, [accountColor])
-
-    useEffect(() => {
-        account && updateAccountColor(account);
-        return () => {
-        }
-    }, [account, setAccountColor])
+    }, [account, updateBackgroundColor])
 
     return (
-        <StyledWallet style={{ 'backgroundColor': accountColor, 'color': textColor }}>
+        <StyledWallet style={{ 'backgroundColor': backgroundColor, 'color': textColor }}>
             <Status connector={connector as Connector} hooks={hooks} />
             <CurrentChain hooks={hooks} />
             <Accounts hooks={hooks} />

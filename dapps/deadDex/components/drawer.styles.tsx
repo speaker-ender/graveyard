@@ -20,7 +20,6 @@ export const StyledDrawerTitle = styled.div<IStyledDrawer>`
         content: ${props => props.open ? '"-"' : '"+"'};
         display: inline-block;
         /* position: relative; */
-        color: white;
     }
 `;
 
@@ -30,21 +29,3 @@ export const StyledDrawerContent = styled.div<IStyledDrawer>`
     pointer-events: ${props => props.open ? "all" : "none"};
     overflow: hidden
 `;
-
-// export const StyledEnderNav = styled(Header3)`
-//     display: inline;
-//     width: 100%;
-//     margin: 0.5rem;
-//     align-self: right;
-//     text-align: right;
-//     cursor: pointer;
-//     z-index: ${LAYERS.header};
-//     mix-blend-mode: difference;
-
-//     svg {
-//         width: 35px;
-//         height: 35px;
-//         fill: white;
-//         padding: 9px;
-//     }
-// `;
