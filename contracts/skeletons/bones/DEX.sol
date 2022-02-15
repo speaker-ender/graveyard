@@ -41,18 +41,6 @@ contract DEX is Ownable {
         emit BuyTokens(msg.sender, msg.value, toBuy);
     }
 
-    function buyOrder() public payable {
-        uint256 toBuy = msg.value * TOKENS_PER_ETH;
-
-        if (deadCoin.balanceOf(address(this)) < toBuy) {
-            revert InsufficientLiquidity();
-        }
-
-        uint256 toSend = msg.value * TOKENS_PER_ETH;
-        deadCoin.transfer(msg.sender, toSend);
-        emit BuyTokens(msg.sender, msg.value, toSend);
-    }
-
     function sellTokens(uint256 theAmount) public {
         if (deadCoin.balanceOf(msg.sender) < theAmount) revert OverSelling();
 
