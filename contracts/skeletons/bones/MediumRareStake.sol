@@ -16,7 +16,7 @@ contract MediumRareStake {
     error StakingEnded();
     error NotWithdrawable();
 
-    constructor(address exampleExternalContractAddress) public {}
+    constructor() public {}
 
     modifier notCompleted() {
         require(!successfulStake, "Completed");

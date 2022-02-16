@@ -82,7 +82,6 @@ describe("DEX", function () {
             });
         });
 
-
         it('correct event emitted on buy', async function () {
             expect(DEX.buyTokens({ value: knownValue })).to.emit(DEX, 'BuyTokens').withArgs(senderAddress, knownValue, knownValue.mul(await DEX.TOKENS_PER_ETH()));
         });
@@ -145,7 +144,7 @@ describe("DEX", function () {
         it('correct event emitted on sell', async function () {
             await deadCoin.connect(receiverAccount).approve(DEX.address, knownValue);
 
-            expect(DEX.connect(receiverAccount).sellTokens(knownValue)).to.emit(DEX, 'SellTokens').withArgs(senderAddress, knownValue.div(await DEX.TOKENS_PER_ETH()), knownValue);
+            expect(DEX.connect(receiverAccount).sellTokens(knownValue)).to.emit(DEX, 'SellTokens').withArgs(receiverAddress, knownValue.div(await DEX.TOKENS_PER_ETH()), knownValue);
         });
 
     });
