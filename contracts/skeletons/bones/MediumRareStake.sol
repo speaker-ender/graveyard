@@ -5,16 +5,19 @@ import "hardhat/console.sol";
 
 contract MediumRareStake {
     uint256 public constant THRESHOLD = 1 ether;
-    uint256 public deadline = block.timestamp + 72 hours;
+    uint256 public deadline = block.timestamp + 60 seconds;
     bool public successfulStake;
     bool public openForWithdraw;
 
     mapping(address => uint256) public balances;
 
     event Stake(address indexed staker, uint256 indexed amount);
+    event Execute(bool successful);
+    event Withdraw(address indexed staker, uint256 amount);
 
     error StakingEnded();
     error NotWithdrawable();
+    error DeadlineNotMet();
 
     constructor() public {}
 
@@ -33,13 +36,16 @@ contract MediumRareStake {
         if (block.timestamp > deadline) {
             if (address(this).balance >= THRESHOLD) {
                 successfulStake = true;
-
                 // exampleExternalContract.complete{
                 //     value: address(this).balance
                 // }();
             } else {
                 openForWithdraw = true;
             }
+
+            emit Execute(successfulStake);
+        } else {
+            revert DeadlineNotMet();
         }
     }
 
@@ -48,6 +54,7 @@ contract MediumRareStake {
             uint256 balance = balances[msg.sender];
             balances[msg.sender] = 0;
             payable(msg.sender).transfer(balance);
+            emit Withdraw(msg.sender, balance);
         } else {
             revert NotWithdrawable();
         }

@@ -7,11 +7,11 @@ import { expectRevert } from "@openzeppelin/test-helpers";
 import { MediumRareStake } from 'typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { getAccounts, getTestValues } from './helpers/Setup';
+import { increaseBlockTime } from './helpers/Time';
+import { parseEther } from 'ethers/lib/utils';
 
 // Constants
 const MAX_SUPPLY = 50;
-const NUMBER_OF_RANDOM_TESTS = 5;
-const VALID_IDS = [...Array(MAX_SUPPLY).keys()];
 
 describe("MediumRareStake", function () {
     // Let's override context later
@@ -35,26 +35,62 @@ describe("MediumRareStake", function () {
     });
 
     describe("Stake Function", function () {
-        it('correct contract eth balance on buy', async function () {
-            const startEthBalance = await ethers.provider.getBalance(mediumRareStake.address);
+        it('correct contract balance on stake', async function () {
+            const startBalance = await ethers.provider.getBalance(mediumRareStake.address);
             await mediumRareStake.stake({ value: knownValue });
-            const endEthBalance = await ethers.provider.getBalance(mediumRareStake.address);
+            const endBalance = await ethers.provider.getBalance(mediumRareStake.address);
 
-            expect(endEthBalance).to.equal((startEthBalance).add(knownValue));
+            expect(endBalance).to.equal((startBalance).add(knownValue));
         });
 
-        it('correct staker eth balance on buy', async function () {
-            const startEthBalance = await ethers.provider.getBalance(senderAddress);
+        it('correct staker balance on stake', async function () {
+            const startBalance = await ethers.provider.getBalance(senderAddress);
             const receipt = await (await mediumRareStake.stake({ value: knownValue })).wait();
-            const endEthBalance = await ethers.provider.getBalance(senderAddress);
+            const endBalance = await ethers.provider.getBalance(senderAddress);
 
             const totalCost = knownValue.add(receipt.cumulativeGasUsed.mul(receipt.effectiveGasPrice));
 
-            expect(endEthBalance).to.equal((startEthBalance).sub(totalCost));
+            expect(endBalance).to.equal((startBalance).sub(totalCost));
         });
 
         it('correct event emitted on stake', async function () {
             expect(mediumRareStake.stake({ value: knownValue })).to.emit(mediumRareStake, 'Stake').withArgs(senderAddress, knownValue);
+        });
+    });
+
+    describe("Execute Function", function () {
+        // Prob need timer
+        it('Wait until deadline met', async function () {
+            await expectRevert(
+                mediumRareStake.execute(),
+                'DeadlineNotMet',
+            );
+        });
+
+        it('Threshold not met', async function () {
+            await increaseBlockTime(60);
+            await expect(mediumRareStake.execute())
+                .to.emit(mediumRareStake, 'Execute')
+                .withArgs(false);
+        });
+
+        it('Threshold met', async function () {
+            await increaseBlockTime(60);
+            await mediumRareStake.stake({ value: parseEther("1") });
+            await expect(mediumRareStake.execute())
+                .to.emit(mediumRareStake, 'Execute')
+                .withArgs(true);
+        });
+
+        it('Already Complete', async function () {
+            await increaseBlockTime(60);
+            await mediumRareStake.stake({ value: parseEther("1") });
+            await mediumRareStake.execute();
+
+            await expectRevert(
+                mediumRareStake.execute(),
+                'Completed',
+            );
         });
     });
 
@@ -65,5 +101,30 @@ describe("MediumRareStake", function () {
                 'NotWithdrawable',
             );
         });
+
+        it('Cannot withdraw because complete', async function () {
+            await increaseBlockTime(60);
+            await mediumRareStake.stake({ value: parseEther("1") });
+            await mediumRareStake.execute();
+
+            await expectRevert(
+                mediumRareStake.withdraw(senderAddress),
+                'Completed',
+            );
+        });
+
+        it('successful withdraw when open', async function () {
+            await increaseBlockTime(60);
+            await mediumRareStake.stake({ value: parseEther("0.5") });
+            await mediumRareStake.execute();
+
+            await expect(mediumRareStake.withdraw(senderAddress))
+                .to.emit(mediumRareStake, 'Withdraw')
+                .withArgs(senderAddress, parseEther("0.5"));
+        });
     });
+
+    describe("timeLeft Function", function () {
+    });
+
 });
