@@ -32,7 +32,7 @@ contract DeadCoin is
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(SNAPSHOT_ROLE, msg.sender);
         _grantRole(PAUSER_ROLE, msg.sender);
-        _mint(msg.sender, 20000 * 10**decimals());
+        _mint(msg.sender, 200 * 18**decimals());
         _grantRole(MINTER_ROLE, msg.sender);
     }
 

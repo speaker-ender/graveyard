@@ -2,14 +2,23 @@ pragma solidity ^0.8.2;
 //SPDX-License-Identifier: MIT
 
 import "hardhat/console.sol";
+import "../../DeadCoin.sol";
+
+uint256 constant THRESHOLD = 1 ether;
 
 contract MediumRareStake {
-    uint256 public constant THRESHOLD = 1 ether;
-    uint256 public deadline = block.timestamp + 60 seconds;
+    DeadCoin public deadCoin;
+    uint256 public immutable deadline;
+    uint256 public stakerCount = 0;
+
+    address public feePoolAddress;
+    uint256 public feeBalance;
+
     bool public successfulStake;
     bool public openForWithdraw;
 
     mapping(address => uint256) public balances;
+    mapping(address => uint256) public deadCoinBalances;
 
     event Stake(address indexed staker, uint256 indexed amount);
     event Execute(bool successful);
@@ -19,7 +28,10 @@ contract MediumRareStake {
     error NotWithdrawable();
     error DeadlineNotMet();
 
-    constructor() public {}
+    constructor(address tokenAddress) {
+        deadCoin = DeadCoin(tokenAddress);
+        deadline = block.timestamp + 60 seconds;
+    }
 
     modifier notCompleted() {
         require(!successfulStake, "Completed");
@@ -30,6 +42,23 @@ contract MediumRareStake {
         if (successfulStake || openForWithdraw) revert StakingEnded();
         balances[msg.sender] += msg.value;
         emit Stake(msg.sender, msg.value);
+    }
+
+    function stakeDead(uint256 coinAmount) public payable {
+        deadCoin.transferFrom(msg.sender, address(this), coinAmount);
+
+        if (deadCoinBalances[msg.sender] == 0) {
+            stakerCount++;
+        }
+
+        deadCoinBalances[msg.sender] += coinAmount;
+
+        emit Stake(msg.sender, coinAmount);
+    }
+
+    function depositFees(uint256 coinAmount) public payable {
+        feeBalance += coinAmount;
+        deadCoin.transferFrom(msg.sender, address(this), coinAmount);
     }
 
     function execute() public notCompleted {
@@ -60,13 +89,22 @@ contract MediumRareStake {
         }
     }
 
+    function withdrawWithFeeAccural(address payable) public {
+        uint256 initialBalance = deadCoinBalances[msg.sender];
+        deadCoinBalances[msg.sender] = 0;
+        uint256 toWithdraw = initialBalance +
+            deadCoinBalances[feePoolAddress] /
+            stakerCount;
+
+        deadCoin.transfer(msg.sender, toWithdraw);
+        stakerCount--;
+
+        emit Withdraw(msg.sender, toWithdraw);
+    }
+
     function timeLeft() public view returns (uint256) {
         uint256 rawTimeLeft = deadline - block.timestamp;
 
         return rawTimeLeft <= 0 ? 0 : rawTimeLeft;
-    }
-
-    receive() external payable {
-        stake();
     }
 }
