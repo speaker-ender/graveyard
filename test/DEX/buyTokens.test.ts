@@ -4,6 +4,7 @@ import { BigNumber } from "ethers";
 import "chai-bn";
 import { ethers } from "hardhat";
 import 'hardhat-deploy';
+import { expectRevert } from "@openzeppelin/test-helpers";
 import { DeadCoin, DEX, MediumRareStake } from 'typechain-types';
 import * as dotenv from "dotenv";
 import { getAccounts, getTestValues } from '../helpers/Setup';
@@ -16,6 +17,7 @@ dotenv.config();
 
 // Constants
 const MAX_TRANSFER_VALUE = 1000000;
+const DEX_LIQUIDITY = parseEther('100');
 
 describe("DEX buyTokens()", function () {
     // Let's override context later
@@ -39,7 +41,27 @@ describe("DEX buyTokens()", function () {
     beforeEach(async function () {
         ; ({ DEX, deadCoin, mediumRareStake } = await getContracts(senderAccount, receiverAddress));
 
-        await deadCoin.transfer(DEX.address, parseEther('100'));
+        await deadCoin.transfer(DEX.address, DEX_LIQUIDITY);
+    });
+
+    it('Revert When Min TX Not Met', async function () {
+        await expectRevert(
+            DEX.buyTokens({ value: BigNumber.from(999 * 10) }),
+            'Min Value Not Met',
+        );
+    });
+
+    it('Revert When Not Enough Liquidity', async function () {
+        await expectRevert(
+            DEX.buyTokens({ value: DEX_LIQUIDITY.add(1) }),
+            'InsufficientLiquidity',
+        );
+    });
+
+    it('Correct Event Emitted', async function () {
+        const dexFee = await DEX.calcFee(ethValue);
+
+        expect(DEX.buyTokens({ value: ethValue })).to.emit(DEX, 'BuyTokens').withArgs(senderAddress, ethValue, ethValue.mul(await DEX.TOKENS_PER_ETH()).sub(dexFee));
     });
 
     describe("Eth Balance Changes", function () {
@@ -109,9 +131,22 @@ describe("DEX buyTokens()", function () {
         });
     });
 
-    it('correct event emitted', async function () {
-        const dexFee = await DEX.calcFee(ethValue);
+    describe("Stake Fee Balance Changes", function () {
 
-        expect(DEX.buyTokens({ value: ethValue })).to.emit(DEX, 'BuyTokens').withArgs(senderAddress, ethValue, ethValue.mul(await DEX.TOKENS_PER_ETH()).sub(dexFee));
+        it('Balance Change', async function () {
+            // Set Start Balance
+            const startBalance = await deadCoin.balanceOf(mediumRareStake.address);
+
+            // Actions To Be Tested
+            await DEX.connect(receiverAccount).buyTokens({ value: ethValue });
+            const dexFee = await DEX.calcFee(ethValue);
+
+            // Set End Results
+            const endBalance = await deadCoin.balanceOf(mediumRareStake.address);
+            const expectedChange = dexFee;
+
+            expect(endBalance).to.equal((startBalance).add(expectedChange));
+        });
     });
 });
+

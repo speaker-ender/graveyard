@@ -4,6 +4,7 @@ import { BigNumber } from "ethers";
 import "chai-bn";
 import { ethers } from "hardhat";
 import 'hardhat-deploy';
+import { expectRevert } from "@openzeppelin/test-helpers";
 import { DeadCoin, DEX, MediumRareStake } from 'typechain-types';
 import * as dotenv from "dotenv";
 import { getAccounts, getTestValues } from '../helpers/Setup';
@@ -16,6 +17,7 @@ dotenv.config();
 
 // Constants
 const MAX_TRANSFER_VALUE = 1000000;
+const DEX_LIQUIDITY = parseEther('4');
 
 describe("DEX sellTokens()", function () {
     // Let's override context later
@@ -30,6 +32,7 @@ describe("DEX sellTokens()", function () {
     let senderAccount: SignerWithAddress;
     let receiverAddress: string;
     let receiverAccount: SignerWithAddress;
+    let TOKENS_PER_ETH: BigNumber;
 
     before(async function () {
         ; ({ zeroValue, knownValue, ethValue, randomValue } = getTestValues(MAX_TRANSFER_VALUE));
@@ -39,11 +42,54 @@ describe("DEX sellTokens()", function () {
     beforeEach(async function () {
         // Setup Env Balances
         ; ({ DEX, deadCoin, mediumRareStake } = await getContracts(senderAccount, receiverAddress));
+        TOKENS_PER_ETH = await DEX.TOKENS_PER_ETH();
 
-        await deadCoin.transfer(receiverAddress, parseEther('50'));
-        await senderAccount.sendTransaction({ to: DEX.address, value: parseEther('4') })
+        await deadCoin.transfer(receiverAddress, parseEther('500'));
+        await senderAccount.sendTransaction({ to: DEX.address, value: DEX_LIQUIDITY })
     });
 
+    it('Revert When Not Approved', async function () {
+        await expectRevert(
+            DEX.connect(receiverAccount).sellTokens(ethValue),
+            "ERC20: transfer amount exceeds allowance",
+        );
+    });
+
+    it('Revert When Min TX Not Met', async function () {
+        await deadCoin.connect(receiverAccount).approve(DEX.address, BigNumber.from(999 * 10));
+
+        await expectRevert(
+            DEX.connect(receiverAccount).sellTokens(BigNumber.from(999 * 10)),
+            'Min Value Not Met',
+        );
+    });
+
+    it('Revert When Not Enough Liquidity', async function () {
+        const transferAmount = DEX_LIQUIDITY.mul(TOKENS_PER_ETH).add(TOKENS_PER_ETH);
+        await deadCoin.connect(receiverAccount).approve(DEX.address, transferAmount);
+
+        await expectRevert(
+            DEX.connect(receiverAccount).sellTokens(transferAmount),
+            'InsufficientLiquidity',
+        );
+    });
+
+    it('Revert When Over Selling', async function () {
+        const balance = await deadCoin.balanceOf(receiverAddress);
+        await deadCoin.connect(receiverAccount).approve(DEX.address, balance.add(1));
+
+        await expectRevert(
+            DEX.connect(receiverAccount).sellTokens(balance.add(1)),
+            "OverSelling",
+        );
+    });
+
+    it('correct event emitted', async function () {
+        await deadCoin.connect(receiverAccount).approve(DEX.address, ethValue);
+        const dexFee = await DEX.calcFee(ethValue.div(await DEX.TOKENS_PER_ETH()));
+
+        expect(DEX.connect(receiverAccount).sellTokens(ethValue)).to.emit(DEX, 'SellTokens').withArgs(receiverAddress, ethValue.div(await DEX.TOKENS_PER_ETH()).sub(dexFee), ethValue);
+    });
 
     describe("Eth Balance Changes", function () {
 
@@ -118,12 +164,5 @@ describe("DEX sellTokens()", function () {
 
             expect(endBalance).to.equal((startBalance).add(expectedChange));
         });
-    });
-
-    it('correct event emitted', async function () {
-        await deadCoin.connect(receiverAccount).approve(DEX.address, ethValue);
-        const dexFee = await DEX.calcFee(ethValue.div(await DEX.TOKENS_PER_ETH()));
-
-        expect(DEX.connect(receiverAccount).sellTokens(ethValue)).to.emit(DEX, 'SellTokens').withArgs(receiverAddress, ethValue.div(await DEX.TOKENS_PER_ETH()).sub(dexFee), ethValue);
     });
 });

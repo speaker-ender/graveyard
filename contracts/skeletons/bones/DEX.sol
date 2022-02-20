@@ -68,11 +68,12 @@ contract DEX is Ownable {
         if (deadCoin.balanceOf(msg.sender) < sellAmount) revert OverSelling();
 
         uint256 fee = calcFee(sellAmount);
+        uint256 sellTotal = sellAmount / TOKENS_PER_ETH;
         uint256 payout = (sellAmount - fee) / TOKENS_PER_ETH;
 
-        hasMinimumTransaction(payout);
+        hasMinimumTransaction(sellTotal);
 
-        if (payout > address(this).balance) revert InsufficientLiquidity();
+        if (sellTotal > address(this).balance) revert InsufficientLiquidity();
 
         deadCoin.transferFrom(msg.sender, address(this), sellAmount);
 
