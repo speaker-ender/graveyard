@@ -11,6 +11,7 @@ import {
 import { deployContract } from 'ethereum-waffle';
 import * as dotenv from "dotenv";
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import { parseEther } from 'ethers/lib/utils';
 
 dotenv.config();
 
@@ -33,7 +34,8 @@ export const getTestValues = (maxRandomValue: number) => {
     return {
         zeroValue: BigNumber.from(0),
         knownValue: BigNumber.from(1),
-        randomValue: BigNumber.from(Math.floor(Math.random() * maxRandomValue))
+        ethValue: parseEther('1'),
+        randomValue: BigNumber.from(Math.floor(Math.random() * maxRandomValue)),
     }
 }
 

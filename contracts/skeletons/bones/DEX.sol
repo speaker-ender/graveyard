@@ -40,7 +40,7 @@ contract DEX is Ownable {
     }
 
     function calcFee(uint256 tradeAmount) public pure returns (uint256) {
-        return (tradeAmount * 1001) / 1000;
+        return ((tradeAmount * 1001) / 1000) - tradeAmount;
     }
 
     function buyTokens() public payable {
@@ -57,23 +57,28 @@ contract DEX is Ownable {
         deadCoin.approve(stakeAddress, fee);
         mediumRareStake.depositFees(fee);
 
-        deadCoin.transfer(msg.sender, toBuy - fee);
+        uint256 toTransfer = toBuy - fee;
 
-        emit BuyTokens(msg.sender, msg.value, toBuy);
+        deadCoin.transfer(msg.sender, toTransfer);
+
+        emit BuyTokens(msg.sender, msg.value, toTransfer);
     }
 
     function sellTokens(uint256 sellAmount) public {
-        uint256 fee = calcFee(sellAmount);
-
         if (deadCoin.balanceOf(msg.sender) < sellAmount) revert OverSelling();
 
-        uint256 payout = sellAmount / TOKENS_PER_ETH;
+        uint256 fee = calcFee(sellAmount);
+        uint256 payout = (sellAmount - fee) / TOKENS_PER_ETH;
 
         hasMinimumTransaction(payout);
 
         if (payout > address(this).balance) revert InsufficientLiquidity();
 
         deadCoin.transferFrom(msg.sender, address(this), sellAmount);
+
+        deadCoin.approve(stakeAddress, fee);
+        mediumRareStake.depositFees(fee);
+
         payable(msg.sender).transfer(payout);
         emit SellTokens(msg.sender, payout, sellAmount);
     }
