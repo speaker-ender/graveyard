@@ -67,21 +67,21 @@ contract DEX is Ownable {
     function sellTokens(uint256 sellAmount) public {
         if (deadCoin.balanceOf(msg.sender) < sellAmount) revert OverSelling();
 
-        uint256 fee = calcFee(sellAmount);
-        uint256 sellTotal = sellAmount / TOKENS_PER_ETH;
-        uint256 payout = (sellAmount - fee) / TOKENS_PER_ETH;
+        uint256 raw_payout = sellAmount / TOKENS_PER_ETH;
+        uint256 fee = calcFee(raw_payout);
+        uint256 actual_payout = raw_payout - fee;
 
-        hasMinimumTransaction(sellTotal);
+        hasMinimumTransaction(raw_payout);
 
-        if (sellTotal > address(this).balance) revert InsufficientLiquidity();
+        if (raw_payout > address(this).balance) revert InsufficientLiquidity();
 
         deadCoin.transferFrom(msg.sender, address(this), sellAmount);
 
         deadCoin.approve(stakeAddress, fee);
         mediumRareStake.depositFees(fee);
 
-        payable(msg.sender).transfer(payout);
-        emit SellTokens(msg.sender, payout, sellAmount);
+        payable(msg.sender).transfer(actual_payout);
+        emit SellTokens(msg.sender, actual_payout, sellAmount);
     }
 
     receive() external payable {

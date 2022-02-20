@@ -45,7 +45,7 @@ describe("DEX sellTokens()", function () {
         TOKENS_PER_ETH = await DEX.TOKENS_PER_ETH();
 
         await deadCoin.transfer(receiverAddress, parseEther('500'));
-        await senderAccount.sendTransaction({ to: DEX.address, value: DEX_LIQUIDITY })
+        await senderAccount.sendTransaction({ to: DEX.address, value: DEX_LIQUIDITY });
     });
 
     it('Revert When Not Approved', async function () {
@@ -141,7 +141,7 @@ describe("DEX sellTokens()", function () {
             // Actions To Be Tested
             await deadCoin.connect(receiverAccount).approve(DEX.address, ethValue);
             await DEX.connect(receiverAccount).sellTokens(ethValue);
-            const dexFee = await DEX.calcFee(ethValue);
+            const dexFee = await DEX.calcFee(ethValue.div(await DEX.TOKENS_PER_ETH()));
 
             // Set End Results
             const endBalance = await deadCoin.balanceOf(DEX.address);
