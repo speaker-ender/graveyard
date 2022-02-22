@@ -6,7 +6,7 @@ export const StyledWalletSelector = styled.div`
     position: absolute;
     top: 0;
     right: 0;
-    background-color: black;
+    background-color: var(--tertiary);
 `;
 
 export const StyledWalletSelectorWrapper = styled.div`
