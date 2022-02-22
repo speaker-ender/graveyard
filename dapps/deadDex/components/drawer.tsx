@@ -1,9 +1,6 @@
 import * as React from "react"
-import { Web3ReactHooks, Web3ReactPriorityHooks } from "@web3-react/core";
 import { useState } from "react";
-import { Deployment } from "hardhat-deploy/types";
 import { useCallback } from "react";
-import { Web3ReactActiveHooks } from "hooks/connector.hooks";
 import { StyledDrawer, StyledDrawerContent, StyledDrawerTitle } from "./drawer.styles";
 
 export interface IDrawer {

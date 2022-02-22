@@ -1,14 +1,12 @@
-import { createGlobalStyle, css } from "styled-components";
+import { createGlobalStyle } from "styled-components";
 import { darkThemeProps, lightThemeProps } from "./theme.styles";
 
 export const GlobalStyle = createGlobalStyle`
   :root {
-    // define light theme values as the defaults within the root selector
-    ${lightThemeProps}
+    ${props => props.theme.isInvert ? darkThemeProps : lightThemeProps}
 
-    // override with dark theme values within media query
     @media (prefers-color-scheme: dark) {
-      ${darkThemeProps}
+        ${props => props.theme.isInvert ? lightThemeProps : darkThemeProps}
     }
   }
 

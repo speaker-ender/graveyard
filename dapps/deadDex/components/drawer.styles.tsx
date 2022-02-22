@@ -1,7 +1,4 @@
-// import { gradient } from "global/animation.styles";
-// import { LAYERS } from "global/layers.styles";
-// import { COLORS } from "global/styles";
-import { Header2, Header2Style } from "../global/typography";
+import { Header2Style } from "../global/typography";
 import styled from "styled-components";
 
 interface IStyledDrawer {

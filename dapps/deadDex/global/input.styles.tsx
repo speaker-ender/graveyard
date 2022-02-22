@@ -1,6 +1,3 @@
-// import { gradient } from "global/animation.styles";
-// import { LAYERS } from "global/layers.styles";
-// import { COLORS } from "global/styles";
 import styled from "styled-components";
 
 interface IStyledInput {
@@ -8,8 +5,8 @@ interface IStyledInput {
 
 export const StyledInput = styled.input<IStyledInput>`
     /* width: 100vw; */
-    background: black;
-    color: white;
+    background: var(--tertiary);
+    color: var(--text);
     border: none;
     padding: 10px 19px;
     border-radius: 5px;
@@ -19,15 +16,15 @@ export const StyledInput = styled.input<IStyledInput>`
     &:hover,
     &:active,
     &:focus {
-        background: rgba(0,0,0, 0.8);
+        background: var(--tertiary--light);
         box-shadow: 2px 2px 1px rgba(255,0,0,1), -2px -2px 1px rgba(0,0,255,1);
     }
 `;
 
 export const StyledSelect = styled.select<IStyledInput>`
     /* width: 100vw; */
-    background: black;
-    color: white;
+    background: var(--tertiary);
+    color: var(--text);
     border: none;
     padding: 10px 19px;
     border-radius: 5px;
@@ -37,7 +34,7 @@ export const StyledSelect = styled.select<IStyledInput>`
     &:hover,
     &:active,
     &:focus {
-        background: rgba(0,0,0, 0.8);
+        background: var(--tertiary--light);
         box-shadow: 2px 2px 1px rgba(255,0,0,1), -2px -2px 1px rgba(0,0,255,1);
     }
 `;
