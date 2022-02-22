@@ -5,10 +5,11 @@ import { useCallback, useEffect, useState } from "react";
 import { BigNumber } from "ethers";
 import { ContractDetails } from "./parts/details";
 import { FunctionFactory } from "./parts/functionFactory";
+import { Web3ReactActiveHooks } from "hooks/connector.hooks";
 
-const DeadCoinContract: React.FC<{ hooks: Web3ReactHooks }> = (props) => {
+const DeadCoinContract: React.FC<{ hooks: Web3ReactActiveHooks }> = (props) => {
     const deadCoinContract = useDeadCoinContract({ hooks: props.hooks });
-    const account = props.hooks.useAccount();
+    const account = props.hooks.useActiveAccount();
     const [balance, setBalance] = useState<BigNumber>(null!);
     const [symbol, setSymbol] = useState<string>(null!);
     // deadCoinContract.interface.functions["balanceOf(address)"].inputs

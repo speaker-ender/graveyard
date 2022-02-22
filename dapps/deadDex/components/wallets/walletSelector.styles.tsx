@@ -6,6 +6,8 @@ export const StyledWalletSelector = styled.div`
     position: absolute;
     top: 0;
     right: 0;
+    padding: 25px;
+    border-radius: ${props => props.theme.rounding.borderRadius};
     background-color: var(--tertiary);
 `;
 

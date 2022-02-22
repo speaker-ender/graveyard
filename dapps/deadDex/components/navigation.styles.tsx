@@ -1,5 +1,4 @@
-// import { LAYERS } from "global/layers.styles";
-// import { COLORS } from "global/styles";
+import { LinkStyles } from "global/link.styles";
 import { Header3Style } from "global/typography";
 import styled from "styled-components";
 
@@ -19,4 +18,8 @@ export const StyledNavigationLink = styled.div`
     ${Header3Style}
     display: inline-block;
     width: 100%;
+
+    & a {
+        ${LinkStyles}
+    }
 `;

@@ -20,6 +20,7 @@ export const StyledHeader = styled.div<IStyledHeader>`
 
     & ${StyledWalletSelectorWrapper} {
         display: inline-block;
+        max-width: 25%;
     }
 `;
 

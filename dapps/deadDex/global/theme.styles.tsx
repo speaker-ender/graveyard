@@ -8,7 +8,7 @@ export const theme = {
         skyBlueDark: '#0e93c4',
         greyBlue: '#016097',
         blood: '#d80000',
-        bloodLight: '#cf3b3b',
+        bloodLight: '#ff3e3e',
         bloodDark: '#6b0101',
         green: '#0afc47',
         black: '#000000',
@@ -21,6 +21,9 @@ export const theme = {
         sandDark: '#afab91',
     },
     isInvert: false,
+    rounding: {
+        borderRadius: '25px',
+    }
 };
 
 export type ThemeType = typeof theme;
@@ -46,6 +49,7 @@ export const lightThemeProps = css`
   --text: ${({ theme }) => theme.colors.black};
   --text-invert: ${({ theme }) => theme.colors.white};
   --background: ${({ theme }) => theme.colors.white};
+  --background-invert: ${({ theme }) => theme.colors.black};
   --primary: ${({ theme }) => theme.colors.skyBlue};
   --primary--light: ${({ theme }) => theme.colors.skyBlueLight};
   --primary--dark: ${({ theme }) => theme.colors.skyBlueDark};
@@ -62,6 +66,7 @@ export const darkThemeProps = css`
   --text: ${({ theme }) => theme.colors.white};
   --text-invert: ${({ theme }) => theme.colors.black};
   --background: ${({ theme }) => theme.colors.black};
+  --background-invert: ${({ theme }) => theme.colors.white};
   --primary: ${({ theme }) => theme.colors.blood};
   --primary--light: ${({ theme }) => theme.colors.bloodLight};
   --primary--dark: ${({ theme }) => theme.colors.bloodDark};
