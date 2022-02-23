@@ -11,11 +11,10 @@ interface IContractFactory {
 const ContractFactory: React.FC<IContractFactory> = (props) => {
     const activeConnectorHooks = useActiveConnectorContext();
     const contracts = activeConnectorHooks && useContracts({ hooks: activeConnectorHooks });
-    console.log(contracts);
-    return (
 
+    return (
         <>
-            {!!contracts && Object.entries(contracts).length > 0 ? Object.entries(contracts).map(([key, value], index) =>
+            {Object.entries(contracts).length > 0 ? Object.entries(contracts).map(([key, value], index) =>
                 <ContractComponent hooks={activeConnectorHooks} contract={value} contractName={key} key={index} />
             ) : <Header3>No Contracts Available For This Chain</Header3>
             }

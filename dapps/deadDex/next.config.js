@@ -3,6 +3,9 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     externalDir: true,
+  },
+  compiler: {
+    styledComponents: true,
   }
 }
 
