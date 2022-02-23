@@ -5,7 +5,7 @@ import { StyledDrawerContent, StyledDrawerTitle } from "components/drawer.styles
 export const StyledWalletSelector = styled.div`
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
     padding: 25px;
     border-radius: ${props => props.theme.rounding.borderRadius};
     background-color: var(--tertiary);
