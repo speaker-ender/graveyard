@@ -10,7 +10,7 @@
   },
   "scripts": {
     "run node": "NODE_OPTIONS=--openssl-legacy-provider hardhat node",
-    "compile": "NODE_OPTIONS=--openssl-legacy-provider hardhat compile",
+    "compile": "NODE_OPTIONS=--openssl-legacy-provider hardhat compile --show-stack-traces",
     "compile matic": "NODE_OPTIONS=--openssl-legacy-provider hardhat compile --network polygonMumbai",
     "clean types": "NODE_OPTIONS=--openssl-legacy-provider hardhat clean",
     "clean and compile": "NODE_OPTIONS=--openssl-legacy-provider hardhat clean && NODE_OPTIONS=--openssl-legacy-provider hardhat compile",
